@@ -125,6 +125,15 @@ class PickImage extends ChangeNotifier {
     }
   }
 
+  Future<void> getRecordedAudioHook(String recordPath) async {
+    final File file = File(recordPath);
+    loadedAudio = await file.readAsBytes();
+
+    audioPath = recordPath;
+
+    notifyListeners();
+  }
+
   void clearImage() {
     convertedImage = null;
     notifyListeners();

@@ -31,6 +31,14 @@ class Log {
 
     dev.log("${_colors[color]}$data$_closeColor", name: name ?? "DEBUG LOG:");
   }
+
+  static void error(String data) {
+    if (!kDebugMode) {
+      return;
+    }
+
+    dev.log("${_colors[LColor.red]}$data$_closeColor", name: "DEBUG LOG:");
+  }
 }
 
 enum LColor {

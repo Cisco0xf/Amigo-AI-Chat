@@ -15,4 +15,7 @@ const String subWelcome =
 const String requestPermi =
     "App needs your permission to upload data from storage";
 
-    const String msgCopied ="Message is copied successfully";
+const String msgCopied = "Message is copied successfully";
+
+const String micPermission =
+    "App needs microphone permission to start recording";

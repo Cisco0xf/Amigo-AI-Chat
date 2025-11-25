@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:amigo/presentation_layer/AI_fitness_screen/components/full_image_dialog.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:amigo/commons/app_dimensions.dart';
@@ -63,7 +64,12 @@ class _MessageWidgetState extends State<MessageWidget> {
         if (widget.message.userImage != null) ...{
           ClipRRect(
             borderRadius: borderRadius(10.0),
-            child: Image.memory(widget.message.userImage!),
+            child: Clicker(
+              onClick: () async {
+                await showFullImageDialog(widget.message.userImage!);
+              },
+              child: Image.memory(widget.message.userImage!),
+            ),
           ),
           const Gap(height: 10),
         },

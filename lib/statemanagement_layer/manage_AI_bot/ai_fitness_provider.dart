@@ -206,13 +206,27 @@ class ManageAiProvider with ChangeNotifier {
         userMessage: sendMessageController.text,
         aiResponse: responseText,
         messageTime: DateTime.now(),
+        userImage: userImage ,
         path: path,
       );
 
       currentChat = [...currentChat, chatMessage];
       notifyListeners();
 
-      await ManageChatHistoryDb.addNewMessage(msg: chatMessage).whenComplete(
+      final PickImage picker = Provider.of<PickImage>(
+        context,
+        listen: false,
+      );
+
+      if (picker.convertedImage != null) {
+        picker.clearImage();
+      }
+
+      if (picker.audioPath != null) {
+        picker.clearAudio();
+      }
+
+      /* await ManageChatHistoryDb.addNewMessage(msg: chatMessage).whenComplete(
         () {
           final PickImage picker = Provider.of<PickImage>(
             context,
@@ -225,7 +239,7 @@ class ManageAiProvider with ChangeNotifier {
 
           picker.clearImage();
         },
-      );
+      ); */
 
       /*  AIHistoryModel chatMessage = AIHistoryModel(   **Hello**
         userMessage: sendMessageController.text,

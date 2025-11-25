@@ -4,6 +4,8 @@ import 'package:amigo/commons/app_dimensions.dart';
 import 'package:amigo/constants/app_fonts.dart';
 import 'package:amigo/commons/commons.dart';
 import 'package:amigo/constants/gaps.dart';
+import 'package:amigo/presentation_layer/AI_fitness_screen/components/full_image_dialog.dart';
+import 'package:amigo/presentation_layer/AI_fitness_screen/components/select_media.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/wavy_audio.dart';
 import 'package:amigo/statemanagement_layer/catch_text_local/catch_text_locale.dart';
 import 'package:amigo/statemanagement_layer/change_app_theme/is_dark_mode.dart';
@@ -44,7 +46,15 @@ class PushMessageToAIWidget extends StatelessWidget {
                           dimension: context.screenHeight * .15,
                           child: ClipRRect(
                             borderRadius: borderRadius(10.0),
-                            child: Image.memory(picker.convertedImage!),
+                            child: Clicker(
+                              onClick: () async {
+                                await showFullImageDialog(picker.convertedImage!);
+                              },
+                              child: Image.memory(
+                                picker.convertedImage!,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -112,30 +122,14 @@ class PushMessageToAIWidget extends StatelessWidget {
                             hintStyle: const TextStyle(
                               fontFamily: FontFamily.mainFont,
                             ),
-                            prefixIcon: IconButton(
-                              onPressed: () async {
-                                /*  await context
-                                    .read<PickImage>()
-                                    .catchImageFromStorage(); */
-                                await context
-                                    .read<PickImage>()
-                                    .loadAudioFronStorage();
-                              },
-                              icon: const Icon(Icons.link_rounded),
-                            ),
+                            prefixIcon: const SelectMedia(),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: borderRadius(25.0),
-                              borderSide: BorderSide(
-                                color: Colors.blue.shade300,
-                                width: 1.0,
-                              ),
+                              borderRadius: borderRadius(30.0),
+                              borderSide: const BorderSide(color: Colors.grey),
                             ),
                             disabledBorder: OutlineInputBorder(
                               borderRadius: borderRadius(30.0),
-                              borderSide: BorderSide(
-                                color: Colors.blue.shade300,
-                                width: 1.0,
-                              ),
+                              borderSide: const BorderSide(color: Colors.grey),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: borderRadius(30.0),
