@@ -1,0 +1,49 @@
+import 'package:amigo/commons/app_dimensions.dart';
+import 'package:amigo/data_layer/ai_models/ai_history_model.dart';
+import 'package:amigo/presentation_layer/AI_fitness_screen/components/message_widget.dart';
+import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_fitness_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:provider/provider.dart';
+
+class FitnessChatWidget extends StatelessWidget {
+  const FitnessChatWidget({super.key});
+
+  List<MessageModel> get _chatMessages => ManageAiProvider.currentChat;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ManageAiProvider>(
+      builder: (context, aiBot, _) {
+        final List<Content> chatHistory = aiBot.aiChat!.history.toList();
+
+        return SingleChildScrollView(
+          controller: aiBot.aiScrollController,
+          padding: EdgeInsets.only(bottom: context.screenHeight * .1),
+          reverse: true,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: List.generate(
+              chatHistory.length,
+              (index) {
+                final Content content = chatHistory[index];
+                /* final String chatTexts = content.parts
+                    .whereType<TextPart>()
+                    .map<String>((partText) => partText.text)
+                    .join("");- */
+                return MessageWidget(
+                  isFromUser: content.role == "user",
+                  messageTime: _chatMessages[(index ~/ 2)].messageTime,
+                  isLastMessage: index == chatHistory.length - 1,
+                  message: _chatMessages[index ~/ 2],
+                  // message: chatTexts,
+                  content: content,
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
