@@ -1,8 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:ui';
+
 import 'package:amigo/commons/app_dimensions.dart';
 import 'package:amigo/commons/commons.dart';
 import 'package:amigo/commons/my_logger.dart';
+import 'package:amigo/constants/app_colors.dart';
 import 'package:amigo/constants/gaps.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/record_manager.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +19,7 @@ Future<void> showRecordingDialog(BuildContext context) async {
     context: context,
     builder: (context) {
       return Dialog(
+        backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(borderRadius: borderRadius(10.0)),
         child: const RecordingDialog(),
       );
@@ -37,8 +41,6 @@ class _RecordingDialogState extends State<RecordingDialog> {
 
   final AudioRecording _recorder = AudioRecording();
 
-  /* String recordDuration = "00:00"; */
-
   @override
   void initState() {
     _recorder.initRecording();
@@ -48,85 +50,96 @@ class _RecordingDialogState extends State<RecordingDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(maxHeight: context.screenHeight * .4),
-      child: Stack(
-        children: <Widget>[
-          Positioned.fill(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox.square(
-                  dimension: context.screenHeight * .2,
-                  child: WaveBlob(
-                    amplitude: 7250.0,
-                    autoScale: true,
-                    blobCount: 4,
-                    overCircle: true,
-                    centerCircle: true,
-                    circleColors: const [
-                      Colors.red,
-                      Colors.green,
+    return ClipRRect(
+      borderRadius: borderRadius(20.0),
+      child: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+          child: Container(
+            constraints: BoxConstraints(maxHeight: context.screenHeight * .4),
+            decoration: BoxDecoration(
+              color: SwitchColors.opcColor /* .withOpacity(0.4) */,
+              borderRadius: borderRadius(20.0),
+              border: Border.all(color: SwitchColors.border),
+            ),
+            child: Stack(
+              children: <Widget>[
+                Positioned.fill(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox.square(
+                        dimension: context.screenHeight * .2,
+                        child: WaveBlob(
+                          amplitude: 7250.0,
+                          autoScale: true,
+                          blobCount: 4,
+                          circleColors: <Color>[
+                            Colors.red.withOpacity(0.9),
+                            Colors.green.withOpacity(0.9),
+                          ],
+                          scale: 1.0,
+                          child: isRecording
+                              ? LoadingAnimationWidget.beat(
+                                  color: SwitchColors.secondary, size: 25.0)
+                              : const Icon(Icons.mic),
+                        ),
+                      ),
+                      const Gap(height: 20),
                     ],
-                    scale: 1.0,
-                    child: isRecording
-                        ? LoadingAnimationWidget.beat(
-                            color: Colors.teal, size: 25.0)
-                        : const Icon(Icons.mic),
                   ),
                 ),
-                const Gap(height: 20),
+                Positioned(
+                  right: 0.0,
+                  left: 0.0,
+                  bottom: 0.0,
+                  child: Container(
+                    height: 110,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: borderRadius(20.0),
+                      color: SwitchColors.secondary.withOpacity(0.5),
+                    ),
+                  ),
+                ),
+                RecordingButton(
+                  isRecording: isRecording,
+                  onRecord: () async {
+                    if (isRecording) {
+                      await _recorder.pauseRecorder();
+                    } else {
+                      if (_started) {
+                        await _recorder.resumeRecorder();
+                      } else {
+                        await _recorder.startRecording();
+                      }
+                    }
+
+                    _started = true;
+
+                    setState(() => isRecording = !isRecording);
+                  },
+                  onProgress: _recorder.audioRecorder.onProgress,
+                ),
+                RecordingControllers(
+                  onCancel: () async {
+                    await _recorder.canelRecording().whenComplete(() {
+                      Navigator.pop(context);
+                    });
+                  },
+                  onDone: () async {
+                    if (!_started) {
+                      Log.error("Not Started yet ...");
+                      return;
+                    }
+
+                    await _recorder.finishRecording(context);
+                  },
+                )
               ],
             ),
           ),
-          Positioned(
-            right: 0.0,
-            left: 0.0,
-            bottom: 0.0,
-            child: Container(
-              height: 110,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: borderRadius(10.0),
-                color: Colors.teal,
-              ),
-            ),
-          ),
-          RecordingButton(
-            isRecording: isRecording,
-            onRecord: () async {
-              if (isRecording) {
-                await _recorder.pauseRecorder();
-              } else {
-                if (_started) {
-                  await _recorder.resumeRecorder();
-                } else {
-                  await _recorder.startRecording();
-                }
-              }
-
-              _started = true;
-
-              setState(() => isRecording = !isRecording);
-            },
-            onProgress: _recorder.audioRecorder.onProgress,
-          ),
-          RecordingControllers(
-            onCancel: () async {
-              await _recorder.canelRecording().whenComplete(() {
-                Navigator.pop(context);
-              });
-            },
-            onDone: () async {
-              if (!_started) {
-                Log.error("Not Started yet ...");
-                return;
-              }
-
-              await _recorder.finishRecording(context);
-            },
-          )
-        ],
+        ),
       ),
     );
   }
@@ -163,9 +176,11 @@ class RecordingButton extends StatelessWidget {
                 onClick: onRecord,
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: borderRadius(7.0),
-                    color: Colors.white,
-                    border: Border.all(color: Colors.teal),
+                    borderRadius: borderRadius(10.0),
+                    color: SwitchColors.opcColor,
+                    border: Border.all(
+                      color: SwitchColors.accent.withOpacity(0.5),
+                    ),
                   ),
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
@@ -205,7 +220,7 @@ class RecordingButton extends StatelessWidget {
                   );
                 }
 
-                Log.error("Hs no Data...");
+                // Log.error("Hs no Data...");
 
                 return const Text("00:00", style: style);
               },
@@ -231,28 +246,30 @@ class RecordingControllers extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       bottom: 10.0,
-      right: 10.0,
-      left: 10.0,
+      right: 20.0,
+      left: 20.0,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
             decoration: BoxDecoration(
-              borderRadius: borderRadius(5.0),
-              color: Colors.red,
+              borderRadius: borderRadius(10.0),
+              color: Colors.red.withOpacity(0.6),
             ),
             child: Clicker(
               onClick: onCancel,
+              innerPadding: 12.0,
               child: const Icon(Icons.clear),
             ),
           ),
           Container(
             decoration: BoxDecoration(
-              borderRadius: borderRadius(5.0),
-              color: Colors.green,
+              borderRadius: borderRadius(10.0),
+              color: SwitchColors.accent.withOpacity(0.6),
             ),
             child: Clicker(
               onClick: onDone,
+              innerPadding: 12.0,
               child: const Icon(Icons.done),
             ),
           ),

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:amigo/commons/app_dimensions.dart';
 import 'package:amigo/commons/commons.dart';
+import 'package:amigo/constants/app_colors.dart';
 import 'package:amigo/constants/gaps.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/recording_dialog.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/pick_image.dart';
@@ -9,6 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MedaiDialogManager {
+  /* 
+  Create another controller for the init state ans swith beteen them according to 
+  the messages History cash
+  
+   */
   static final OverlayPortalController controller = OverlayPortalController();
 
   static void showSelector() {
@@ -55,8 +61,8 @@ class SelectMedia extends StatelessWidget {
                           padding: padding(5.0),
                           decoration: BoxDecoration(
                             borderRadius: borderRadius(10.0),
-                            color: Colors.white30,
-                            border: Border.all(color: Colors.black38),
+                            color: SwitchColors.primary.withOpacity(0.4),
+                            border: Border.all(color: SwitchColors.border),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,10 +166,10 @@ class MediaItem extends StatelessWidget {
           const Gap(width: 6.0),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.bold,
-              color: Colors.blueGrey,
+              color: SwitchColors.text,
             ),
           ),
         ],

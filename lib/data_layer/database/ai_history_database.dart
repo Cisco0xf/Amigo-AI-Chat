@@ -1,4 +1,4 @@
-// ignore_for_file: constant_identifier_names, use_build_context_synchronously
+// ignore_for_file: constant_identifier_names
 
 /* import 'dart:developer';
 
@@ -45,6 +45,7 @@ class AiHistoryDatabase implements LocalRepository {
  */
 
 import 'package:amigo/commons/my_logger.dart';
+import 'package:amigo/commons/navigation_key.dart';
 import 'package:amigo/data_layer/ai_models/ai_history_model.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_fitness_provider.dart';
 import 'package:flutter/material.dart';
@@ -118,8 +119,9 @@ class ManageChatHistoryDb {
 
     try {
       await _chatHistory.addMessageToDatabase(box: box, message: msg);
+      Log.log("Message has been added to database...");
     } catch (error) {
-      Log.log('Adding New DB mesg Error => $error', color: LColor.red);
+      Log.error('Adding New DB mesg Error => $error');
     }
   }
 
@@ -129,7 +131,7 @@ class ManageChatHistoryDb {
     try {
       await _chatHistory.removeMessageFromDatabase(box: box, message: msg);
     } catch (error) {
-      Log.log('Remove form DB mesg Error => $error', color: LColor.red);
+      Log.error('Remove form DB mesg Error => $error');
     }
   }
 
@@ -138,7 +140,8 @@ class ManageChatHistoryDb {
 
     final List<MessageModel> chatDb = _chatHistory.getMessagesFromDB(box: box);
 
-    Provider.of<ManageAiProvider>(context, listen: false)
+    navigatorKey.currentContext!
+        .read<ManageAiProvider>()
         .initializeCurrentChatFromDBHistory(db: chatDb);
   }
 
@@ -152,5 +155,6 @@ class ManageChatHistoryDb {
 class InitDatabases {
   static Future<void> initDatabases(BuildContext context) async {
     await ManageChatHistoryDb.initializeChathistoryFromDB(context);
+    Log.log("Database has been initialized successfully..");
   }
 }

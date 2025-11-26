@@ -2,11 +2,12 @@ import 'package:amigo/commons/app_dimensions.dart';
 import 'package:amigo/commons/show_toastification.dart';
 import 'package:amigo/constants/app_colors.dart';
 import 'package:amigo/constants/app_fonts.dart';
+import 'package:amigo/constants/assets.dart';
 import 'package:amigo/constants/gaps.dart';
 import 'package:amigo/commons/commons.dart';
 import 'package:amigo/data_layer/ai_models/ai_history_model.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/ai_chat_settings/show_clear_dialog.dart';
-import 'package:amigo/statemanagement_layer/change_app_theme/set_dark_model_provider.dart';
+import 'package:amigo/statemanagement_layer/change_app_theme/theme_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_fitness_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_settings_provider.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class AISettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<DarkModeProvider>(
+    return Consumer<ThemeProvider>(
       builder: (context, _, __) {
         return Consumer<AiSettingsProvider>(
           builder: (context, settings, _) {
@@ -61,7 +62,7 @@ class AISettingsWidget extends StatelessWidget {
                         );
                       },
                       color: 0xFFF6EFBD,
-                      imagePath: "assets/images/svg/ai_images/creativity.svg",
+                      imagePath: Assets.creativity,
                     ),
                     const Gap(hRatio: 0.02),
                     ChangeValueWidget(
@@ -77,8 +78,7 @@ class AISettingsWidget extends StatelessWidget {
                         );
                       },
                       color: 0xFFB9E5E8,
-                      imagePath:
-                          "assets/images/svg/ai_images/output_length.svg",
+                      imagePath: Assets.output,
                     ),
                     const Gap(hRatio: 0.02),
                     Row(
@@ -91,8 +91,7 @@ class AISettingsWidget extends StatelessWidget {
                             onPressed: () {
                               Navigator.pop(context);
                               showToastification(
-                                title:
-                                    "AI Settings has been saved successfully",
+                                title: "Settings has been saved successfully",
                                 type: ToastificationType.success,
                               );
                             },
@@ -318,7 +317,7 @@ class DarkModeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<DarkModeProvider>(builder: (context, mode, _) {
+    return Consumer<ThemeProvider>(builder: (context, mode, _) {
       return Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 10,
@@ -336,9 +335,7 @@ class DarkModeWidget extends StatelessWidget {
             ),
             Switch(
               value: mode.isDark,
-              onChanged: (bool idDark) {
-                mode.setDarkMode;
-              },
+              onChanged: (bool isDark) async => await mode.switchTheme(isDark),
             )
           ],
         ),

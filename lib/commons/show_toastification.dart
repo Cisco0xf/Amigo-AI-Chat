@@ -15,7 +15,7 @@ void showToastification({
     autoCloseDuration: const Duration(milliseconds: 2000),
     animationDuration: const Duration(milliseconds: 300),
     type: type,
-    backgroundColor: ColorsSwitcher.mainColor.withOpacity(0.5),
+    backgroundColor: SwitchColors.opcColor,
     applyBlurEffect: true,
     description: Text(
       title,

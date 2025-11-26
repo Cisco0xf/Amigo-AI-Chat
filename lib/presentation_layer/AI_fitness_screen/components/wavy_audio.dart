@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:amigo/constants/app_colors.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:amigo/commons/app_dimensions.dart';
 import 'package:amigo/commons/commons.dart';
@@ -91,33 +92,32 @@ class _WavyAudioState extends State<WavyAudio> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ManageAudioProvider>(builder: (context, update, __) {
-      return ClipRRect(
-        borderRadius: borderRadius(10.0),
-        child: ClipRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
-            child: Container(
-              padding: padding(7.0),
-              decoration: BoxDecoration(
-                borderRadius: borderRadius(10.0),
-                color: widget.bgColor,
-                border: Border.all(color: Colors.white38),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    children: <Widget>[
-                      IconButton(
-                        onPressed: () async {
-                          if (_isPlaying) {
-                            await controller.pausePlayer();
-                          } else {
-                            await controller.startPlayer();
-                          }
+    return ClipRRect(
+      borderRadius: borderRadius(10.0),
+      child: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+          child: Container(
+            padding: padding(7.0),
+            decoration: BoxDecoration(
+              borderRadius: borderRadius(10.0),
+              color: widget.bgColor.withOpacity(0.4),
+              border: Border.all(color: SwitchColors.border),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: <Widget>[
+                    IconButton(
+                      onPressed: () async {
+                        if (_isPlaying) {
+                          await controller.pausePlayer();
+                        } else {
+                          await controller.startPlayer();
+                        }
 
-                          controller.setFinishMode(finishMode: FinishMode.loop);
-                          /* if (update.isPlaying) {
+                        controller.setFinishMode(finishMode: FinishMode.loop);
+                        /* if (update.isPlaying) {
                             await update.pauseAudio();
                           } else {
                             await update.playAudio();
@@ -125,29 +125,28 @@ class _WavyAudioState extends State<WavyAudio> {
 
                           update.controller!
                               .setFinishMode(finishMode: FinishMode.loop); */
-                        },
-                        icon: _isPlaying
-                            ? LoadingAnimationWidget.beat(
-                                color: Colors.white, size: 20)
-                            : const Icon(Icons.play_arrow_rounded),
-                      ),
-                      AudioFileWaveforms(
-                        size: _audioSize,
-                        playerController: controller /* update.controller! */,
-                        waveformType: WaveformType.fitWidth,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      },
+                      icon: _isPlaying
+                          ? LoadingAnimationWidget.beat(
+                              color: Colors.white, size: 20)
+                          : const Icon(Icons.play_arrow_rounded),
+                    ),
+                    AudioFileWaveforms(
+                      size: _audioSize,
+                      playerController: controller /* update.controller! */,
+                      waveformType: WaveformType.fitWidth,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
-      );
-    });
+      ),
+    );
   }
 }
-
+/* 
 class ManageAudioProvider extends ChangeNotifier {
   PlayerController? controller;
   StreamSubscription? subscription;
@@ -196,3 +195,4 @@ class ManageAudioProvider extends ChangeNotifier {
     }
   }
 }
+ */

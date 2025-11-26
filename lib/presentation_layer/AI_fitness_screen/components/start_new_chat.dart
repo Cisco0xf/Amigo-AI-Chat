@@ -1,3 +1,5 @@
+import 'package:amigo/constants/assets.dart';
+import 'package:amigo/presentation_layer/AI_fitness_screen/components/push_message_widget.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:amigo/commons/app_dimensions.dart';
 import 'package:amigo/constants/app_fonts.dart';
@@ -13,7 +15,7 @@ class StartNewChatWidget extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          TweenAnimationBuilder(
+          /* TweenAnimationBuilder(
             tween: Tween<double>(begin: .5, end: .9),
             duration: const Duration(milliseconds: 2300),
             builder: (context, size, _) {
@@ -25,12 +27,13 @@ class StartNewChatWidget extends StatelessWidget {
                 ),
               );
             },
-          ),
+          ), */
+          const AnimatedLogo(),
           SizedBox(
             width: context.screenWidth * .96,
-            height: context.screenHeight * .15,
             child: AnimatedTextKit(
-              repeatForever: true,
+              repeatForever: false,
+              totalRepeatCount: 3,
               pause: const Duration(milliseconds: 1200),
               animatedTexts: <AnimatedText>[
                 TypewriterAnimatedText(
@@ -54,8 +57,63 @@ class StartNewChatWidget extends StatelessWidget {
               fontFamily: FontFamily.mainFont,
             ),
           ),
+          const Gap(hRatio: 0.01),
+          const PushMessageToAIWidget(init: true),
         ],
       ),
+    );
+  }
+}
+
+class AnimatedLogo extends StatefulWidget {
+  const AnimatedLogo({super.key});
+
+  @override
+  State<AnimatedLogo> createState() => _AnimatedLogoState();
+}
+
+class _AnimatedLogoState extends State<AnimatedLogo>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
+
+  void _initAnimationProperties() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1800),
+    );
+
+    _animation = Tween<double>(begin: 0.0, end: 20.0).animate(_controller);
+
+    _controller.repeat(reverse: true);
+  }
+
+  @override
+  void initState() {
+    _initAnimationProperties();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(0.0, -_animation.value),
+          child: SizedBox(
+            height: context.screenHeight * .4,
+            width: context.screenWidth * .8,
+            child: Image.asset(Assets.logo),
+          ),
+        );
+      },
     );
   }
 }

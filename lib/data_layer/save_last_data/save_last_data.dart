@@ -73,7 +73,7 @@ class SaveAnimatedTextBoolValue implements SaveUserChanges {
     return isTextAnimated;
   }
 }
-
+/* 
 class SaveAppMode implements SaveUserChanges {
   final String _modekey = "MODE_KEY";
 
@@ -93,3 +93,4 @@ class SaveAppMode implements SaveUserChanges {
     return isDarkFromDatabase;
   }
 }
+ */

@@ -6,11 +6,10 @@ const String internetError = "Please check your internet connection.";
 
 const String clearSession = "Would you like to clear this session ?";
 
-const String welcom =
-    "Welcom to fitness AI, your powerfull tool for a better health.";
+const String welcom = "Hello, I'm Amigo.";
 
 const String subWelcome =
-    "An intelligent fitness coach that provides personalized workout plans, real-time progress tracking, and tailored nutrition advice";
+    "Let's start a conversation that makes your day better. Here to walk alongside you.";
 
 const String requestPermi =
     "App needs your permission to upload data from storage";
@@ -19,3 +18,5 @@ const String msgCopied = "Message is copied successfully";
 
 const String micPermission =
     "App needs microphone permission to start recording";
+
+const String appTitle = "Amigo.ai";

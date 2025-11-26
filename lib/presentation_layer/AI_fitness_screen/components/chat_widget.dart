@@ -6,8 +6,45 @@ import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:provider/provider.dart';
 
-class FitnessChatWidget extends StatelessWidget {
-  const FitnessChatWidget({super.key});
+class AmigoChat extends StatelessWidget {
+  const AmigoChat({super.key});
+
+  List<MessageModel> get _chatMessages => ManageAiProvider.currentChat;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ManageAiProvider>(
+      builder: (context, aiBot, _) {
+        // final List<Content> chatHistory = aiBot.aiChat!.history.toList();
+
+        return SingleChildScrollView(
+          controller: aiBot.aiScrollController,
+          padding: EdgeInsets.only(bottom: context.screenHeight * .13),
+          reverse: true,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: List.generate(
+              _chatMessages.length * 2,
+              (index) {
+                return MessageWidget(
+                  isFromUser: index % 2 == 0,
+                  messageTime: _chatMessages[index ~/ 2].messageTime,
+                  //isLastMessage: index == chatHistory.length - 1,
+                  isLastMessage: index == (_chatMessages.length * 2) - 1,
+                  message: _chatMessages[index ~/ 2],
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/* 
+class AmigoChat extends StatelessWidget {
+  const AmigoChat({super.key});
 
   List<MessageModel> get _chatMessages => ManageAiProvider.currentChat;
 
@@ -19,25 +56,27 @@ class FitnessChatWidget extends StatelessWidget {
 
         return SingleChildScrollView(
           controller: aiBot.aiScrollController,
-          padding: EdgeInsets.only(bottom: context.screenHeight * .1),
+          padding: EdgeInsets.only(bottom: context.screenHeight * .13),
           reverse: true,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: List.generate(
-              chatHistory.length,
+              _chatMessages.length * 2 /* chatHistory.length */,
               (index) {
-                final Content content = chatHistory[index];
+                //final Content content = chatHistory[index];
                 /* final String chatTexts = content.parts
                     .whereType<TextPart>()
                     .map<String>((partText) => partText.text)
                     .join("");- */
                 return MessageWidget(
-                  isFromUser: content.role == "user",
-                  messageTime: _chatMessages[(index ~/ 2)].messageTime,
+                  isFromUser:
+                      index == 0 || index % 2 == 0 /* content.role == "user" */,
+                  messageTime: _chatMessages[index ~/ 2].messageTime,
+                  //isLastMessage: index == _chatMessages.length - 1,
                   isLastMessage: index == chatHistory.length - 1,
                   message: _chatMessages[index ~/ 2],
                   // message: chatTexts,
-                  content: content,
+                  // content: content,
                 );
               },
             ),
@@ -47,3 +86,4 @@ class FitnessChatWidget extends StatelessWidget {
     );
   }
 }
+ */

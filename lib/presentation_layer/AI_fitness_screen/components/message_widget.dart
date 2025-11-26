@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:amigo/constants/app_colors.dart';
+import 'package:amigo/constants/assets.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/full_image_dialog.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clipboard/clipboard.dart';
@@ -13,7 +15,7 @@ import 'package:amigo/constants/text_styles.dart';
 import 'package:amigo/data_layer/ai_models/ai_history_model.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/wavy_audio.dart';
 import 'package:amigo/statemanagement_layer/change_app_theme/is_dark_mode.dart';
-import 'package:amigo/statemanagement_layer/change_app_theme/set_dark_model_provider.dart';
+import 'package:amigo/statemanagement_layer/change_app_theme/theme_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_fitness_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_settings_provider.dart';
 import 'package:flutter/material.dart';
@@ -27,14 +29,14 @@ class MessageWidget extends StatefulWidget {
     super.key,
     required this.isFromUser,
     /*  required this.message, */
-    required this.content,
+    //  required this.content,
     required this.isLastMessage,
     required this.messageTime,
     required this.message,
   });
 
   /*  final String message; */
-  final Content content;
+  // final Content content;
   final DateTime messageTime;
   final bool isFromUser;
   final bool isLastMessage;
@@ -45,7 +47,20 @@ class MessageWidget extends StatefulWidget {
 }
 
 class _MessageWidgetState extends State<MessageWidget> {
-  bool isResponseEnded = true;
+  bool isResponseEnded = false;
+
+  static const int _animatedTxtDuration = 3;
+
+  void _normlizeText() {
+    Future.delayed(
+      const Duration(seconds: _animatedTxtDuration),
+      () {
+        setState(
+          () => isResponseEnded = true,
+        );
+      },
+    );
+  }
 
   /* String get message {
     return widget.content.parts
@@ -76,6 +91,7 @@ class _MessageWidgetState extends State<MessageWidget> {
         if (widget.message.path != null) ...{
           WavyAudio(
             path: widget.message.path!,
+            bgColor: SwitchColors.accent,
             width: context.screenWidth * .64,
           ),
         },
@@ -97,72 +113,78 @@ class _MessageWidgetState extends State<MessageWidget> {
               ),
             ],
           )
-        : isTextAnimted
+        : !isResponseEnded && isTextAnimted
             ? AnimatedTextKit(
                 totalRepeatCount: 1,
                 animatedTexts: <AnimatedText>[
                   TypewriterAnimatedText(
                     message,
+                    //speed: const Duration(seconds: _animatedTxtDuration),
                     textStyle: const TextStyle(
                       fontFamily: FontFamily.mainFont,
                     ),
                   )
                 ],
               )
-            : MarkdownBody(
-                data: message,
-                selectable: true,
-              );
+            : MarkdownBody(data: message, selectable: true);
   }
-
-  /* Uint8List? get targetImaget {
-    return widget.content.parts.whereType<DataPart>().firstOrNull?.bytes;
-  } */
 
   @override
   void initState() {
-    /* Future.delayed(
-      const Duration(seconds: 10),
-      () {
-        setState(
-          () {
-            isResponseEnded = false;
-          },
-        );
-      },
-    ); */
+    _normlizeText();
     super.initState();
   }
 
   double get _boxWidth =>
-      widget.isFromUser ? context.screenWidth * .88 : context.screenWidth * .7;
+      widget.isFromUser ? context.screenWidth * .88 : context.screenWidth * .8;
 
+  BorderRadius _userRaduis({double raduis = 15.0}) => BorderRadius.only(
+        topLeft: Radius.circular(raduis),
+        topRight: Radius.circular(raduis),
+        bottomRight: Radius.circular(raduis),
+        bottomLeft: widget.isFromUser
+            ? const Radius.circular(0)
+            : Radius.circular(raduis),
+      );
   @override
   Widget build(BuildContext context) {
-    return Consumer<DarkModeProvider>(builder: (context, _, __) {
-      return Consumer<AiSettingsProvider>(builder: (context, settings, _) {
-        return Consumer<ManageAiProvider>(
-          builder: (context, aiChat, _) {
-            bool isTextAnimted =
-                widget.isLastMessage && settings.isResponseAnimated;
+    context.watch<ThemeProvider>();
+    return Consumer<AiSettingsProvider>(builder: (context, settings, _) {
+      return Consumer<ManageAiProvider>(
+        builder: (context, aiChat, _) {
+          bool isTextAnimted =
+              widget.isLastMessage && settings.isResponseAnimated;
 
-            return Column(
-              children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: widget.isFromUser
-                      ? MainAxisAlignment.start
-                      : MainAxisAlignment.end,
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(
-                        top: 10,
-                        bottom: widget.isFromUser ? 2.0 : 10,
-                        right: widget.isFromUser ? 10 : 0,
-                        left: 10,
+          return Column(
+            crossAxisAlignment: widget.isFromUser
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: widget.isFromUser
+                    ? MainAxisAlignment.start
+                    : MainAxisAlignment.end,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: 10,
+                      bottom: widget.isFromUser ? 2.0 : 10,
+                      right: widget.isFromUser ? 10 : 0,
+                      left: 10,
+                    ),
+                    constraints: BoxConstraints(maxWidth: _boxWidth),
+                    decoration: BoxDecoration(
+                      borderRadius: _userRaduis(
+                        raduis: widget.isFromUser ? 25.0 : 15.0,
                       ),
-                      constraints: BoxConstraints(maxWidth: _boxWidth),
-                      decoration: BoxDecoration(
+                      color: widget.isFromUser
+                          ? SwitchColors.secondary
+                          : SwitchColors.primary,
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
                         borderRadius: BorderRadius.only(
                           topLeft: const Radius.circular(15),
                           topRight: const Radius.circular(15),
@@ -171,74 +193,62 @@ class _MessageWidgetState extends State<MessageWidget> {
                               ? const Radius.circular(0)
                               : const Radius.circular(15),
                         ),
-                        color: widget.isFromUser
-                            ? !context.isDark
-                                ? const Color(0xFF3887BE)
-                                : const Color(0xFF225172)
-                            : !context.isDark
-                                ? const Color(0xFF9BB8CD)
-                                : const Color(0xFF3e4a52),
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius: BorderRadius.only(
-                            topLeft: const Radius.circular(15),
-                            topRight: const Radius.circular(15),
-                            bottomRight: const Radius.circular(15),
-                            bottomLeft: widget.isFromUser
-                                ? const Radius.circular(0)
-                                : const Radius.circular(15),
-                          ),
-                          onLongPress: () {
-                            FlutterClipboard.copy(message).whenComplete(
-                              () => showToastification(
-                                  title: msgCopied,
-                                  type: ToastificationType.success),
-                            );
-                          },
-                          child: Padding(
-                            padding: padding(10.0),
-                            child: _messageContent(isTextAnimted),
-                          ),
+                        onLongPress: () {
+                          FlutterClipboard.copy(message).whenComplete(
+                            () => showToastification(
+                                title: msgCopied,
+                                type: ToastificationType.success),
+                          );
+                        },
+                        child: Padding(
+                          padding: padding(10.0),
+                          child: _messageContent(isTextAnimted),
                         ),
                       ),
                     ),
-                    if (!widget.isFromUser) ...{
-                      Padding(
-                        padding: padding(5.0),
-                        child: CircleAvatar(
-                          backgroundColor: const Color(0xFF9BB8CD),
-                          child: Image.asset(
-                            "assets/images/png/fitness_ai.png",
-                          ),
-                        ),
-                      )
-                    }
-                  ],
-                ),
-                if (widget.isFromUser) ...{
-                  Row(
+                  ),
+                  if (!widget.isFromUser) ...{
+                    Padding(
+                      padding: padding(5.0),
+                      child: CircleAvatar(
+                        backgroundColor: const Color(0xFF9BB8CD),
+                        child: Image.asset(Assets.logo),
+                      ),
+                    )
+                  }
+                ],
+              ),
+              if (widget.isFromUser) ...{
+                Container(
+                  margin: EdgeInsets.only(left: context.screenWidth * .03),
+                  padding: padding(5.0),
+                  decoration: BoxDecoration(
+                    borderRadius: _userRaduis(),
+                    color: SwitchColors.opcColor,
+                    border: Border.all(color: SwitchColors.border),
+                  ),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      const Gap(wRatio: 0.03),
+                      /* const Gap(wRatio: 0.03), */
                       Text(
                         widget.messageTime.formatMessageTime,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w200,
-                          color: Color(0xFF9e9e9e),
+                          color: SwitchColors.text,
                           fontFamily: FontFamily.mainFont,
                         ),
                       ),
                     ],
-                  )
-                },
-              ],
-            );
-          },
-        );
-      });
+                  ),
+                )
+              },
+            ],
+          );
+        },
+      );
     });
   }
 }

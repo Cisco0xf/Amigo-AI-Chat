@@ -11,6 +11,7 @@ Future<void> showFullImageDialog(Uint8List image) async {
     context: context,
     builder: (context) {
       return Dialog.fullscreen(
+        backgroundColor: Colors.transparent,
         child: _FullImage(image: image),
       );
     },
@@ -24,12 +25,9 @@ class _FullImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InteractiveViewer(
-      child: ClipRRect(
-        borderRadius: borderRadius(20.0),
-        child: Container(
-          padding: padding(20.0),
-          child: Image.memory(image),
-        ),
+      child: Container(
+        padding: padding(20.0),
+        child: Image.memory(image),
       ),
     );
   }

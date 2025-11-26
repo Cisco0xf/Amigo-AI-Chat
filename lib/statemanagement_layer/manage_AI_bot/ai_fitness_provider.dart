@@ -11,6 +11,7 @@ import 'package:amigo/constants/api_constants.dart';
 import 'package:amigo/constants/text_styles.dart';
 import 'package:amigo/data_layer/ai_models/ai_history_model.dart';
 import 'package:amigo/data_layer/database/ai_history_database.dart';
+import 'package:amigo/data_layer/save_last_data/save_prefs.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/show_error_dialog.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_settings_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/pick_image.dart';
@@ -27,10 +28,14 @@ class ManageAiProvider with ChangeNotifier {
 
   final FocusNode aiChatFocus = FocusNode(debugLabel: "AI message request");
 
+  bool get hasData => sendMessageController.text.trim().isNotEmpty; 
+
   // Scroll to bottom in case the animated text is on
 
   void autoScrollDown() {
-    int resultTextIndex = 0;
+    // int resultTextIndex = 0;
+
+    int scrollRatio = 0;
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
@@ -39,10 +44,23 @@ class ManageAiProvider with ChangeNotifier {
           (Timer timer) {
             log("Scrolling Down.....");
 
-            resultTextIndex++;
+            // resultTextIndex++;
+
+            scrollRatio += 100;
+
             notifyListeners();
 
-            bool isFullTextComplet =
+            if (aiScrollController.hasClients && scrollRatio < 3000) {
+              aiScrollController.animateTo(
+                0.0,
+                curve: Curves.linear,
+                duration: const Duration(milliseconds: 100),
+              );
+            } else {
+              timer.cancel();
+            }
+
+            /*    bool isFullTextComplet =
                 (lastMessageFromAi.length / 3.5) >= resultTextIndex;
 
             if (aiScrollController.hasClients && isFullTextComplet) {
@@ -50,7 +68,7 @@ class ManageAiProvider with ChangeNotifier {
             } else {
               log("Scrolling has been finished ");
               timer.cancel();
-            }
+            } */
           },
         );
       },
@@ -106,7 +124,7 @@ class ManageAiProvider with ChangeNotifier {
 
   // Send Message
 
-  Color sendButtonColor = const Color(0xFF818FB4);
+  // Color sendButtonColor = const Color(0xFF818FB4);
 
   bool get isUserEnterAnyThing => sendMessageController.text.trim().isNotEmpty;
 
@@ -128,6 +146,8 @@ class ManageAiProvider with ChangeNotifier {
   GenerativeModel? gemiAI;
 
   void initializeAIProperties() {
+     
+
     gemiAI = GenerativeModel(
       model: APIConstants.model,
       apiKey: APIConstants.geminiApiKey,
@@ -136,6 +156,8 @@ class ManageAiProvider with ChangeNotifier {
         maxOutputTokens: aiSettings.outputLengthValue,
       ),
     );
+
+    Log.log("Length of the current chat items => ${currentChat.length}");
 
     //
     aiChat = gemiAI!.startChat(
@@ -206,7 +228,7 @@ class ManageAiProvider with ChangeNotifier {
         userMessage: sendMessageController.text,
         aiResponse: responseText,
         messageTime: DateTime.now(),
-        userImage: userImage ,
+        userImage: userImage,
         path: path,
       );
 
@@ -226,34 +248,7 @@ class ManageAiProvider with ChangeNotifier {
         picker.clearAudio();
       }
 
-      /* await ManageChatHistoryDb.addNewMessage(msg: chatMessage).whenComplete(
-        () {
-          final PickImage picker = Provider.of<PickImage>(
-            context,
-            listen: false,
-          );
-
-          if (picker.convertedImage == null) {
-            return;
-          }
-
-          picker.clearImage();
-        },
-      ); */
-
-      /*  AIHistoryModel chatMessage = AIHistoryModel(   **Hello**
-        userMessage: sendMessageController.text,
-        aiResponse: responseText,
-        messageTime: DateTime.now(),
-      );
- */
-      // await manageChatHistoryDatabase.addNewMessage(message: chatMessage);
-
-      // For the runTime Data
-
-      /* aiChatHistory.add(
-        chatMessage,
-      ); */
+      await ManageChatHistoryDb.addNewMessage(msg: chatMessage);
 
       // Scroll to Bottom according to the Animted Text bool value
 
@@ -286,6 +281,6 @@ class ManageAiProvider with ChangeNotifier {
   //  Init current chat to the DB chat
 
   void initializeCurrentChatFromDBHistory({required List<MessageModel> db}) {
-    currentChat = db;
+    currentChat = [for (int i = 0; i < db.length; i++) db[i]];
   }
 }

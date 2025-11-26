@@ -28,4 +28,3 @@ class MessageModel {
   }) : id = messageTime.toIso8601String();
 }
 
-// List<AIHistoryModel> aiChatHistory = const <AIHistoryModel>[];

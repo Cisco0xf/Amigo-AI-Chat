@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:amigo/commons/app_dimensions.dart';
+import 'package:amigo/constants/app_colors.dart';
 import 'package:amigo/constants/app_fonts.dart';
 import 'package:amigo/commons/commons.dart';
 import 'package:amigo/constants/gaps.dart';
@@ -18,15 +20,13 @@ import 'package:provider/provider.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
 
 class PushMessageToAIWidget extends StatelessWidget {
-  const PushMessageToAIWidget({
-    super.key,
-    required this.buttonColor,
-  });
+  const PushMessageToAIWidget({super.key, this.init = false});
 
-  final Color buttonColor;
+  final bool init;
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ManageAiProvider>();
     return Column(
       children: [
         Consumer<PickImage>(
@@ -48,7 +48,8 @@ class PushMessageToAIWidget extends StatelessWidget {
                             borderRadius: borderRadius(10.0),
                             child: Clicker(
                               onClick: () async {
-                                await showFullImageDialog(picker.convertedImage!);
+                                await showFullImageDialog(
+                                    picker.convertedImage!);
                               },
                               child: Image.memory(
                                 picker.convertedImage!,
@@ -76,6 +77,7 @@ class PushMessageToAIWidget extends StatelessWidget {
                         const Gap(height: 10.0),
                         WavyAudio(
                           path: picker.audioPath!,
+                          bgColor: SwitchColors.secondary,
                           width: context.screenWidth * .6,
                         ),
                       ],
@@ -91,51 +93,72 @@ class PushMessageToAIWidget extends StatelessWidget {
             return Padding(
               padding: padding(10),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   Consumer<CatchTextLocalProvider>(
                     builder: (context, textLocale, _) {
                       return Expanded(
-                        child: TextField(
-                          controller: ai.sendMessageController,
-                          focusNode: ai.aiChatFocus,
-                          autofocus: true,
-                          enabled: !ai.isResponseLoading,
-                          onChanged: (String text) {
-                            textLocale.catchTextLocal(text: text);
-                          },
-                          style: TextStyle(
-                            fontFamily: textLocale.isEnglish
-                                ? null
-                                : FontFamily.arabicFont,
-                            fontWeight:
-                                textLocale.isEnglish ? FontWeight.bold : null,
-                          ),
-                          textDirection: textLocale.isEnglish
-                              ? TextDirection.ltr
-                              : TextDirection.rtl,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: !context.isDark
-                                ? const Color(0xFF6eadf9).withOpacity(0.9)
-                                : const Color(0xFF03346E).withOpacity(0.9),
-                            hintText: "Enter a fitness question...",
-                            hintStyle: const TextStyle(
-                              fontFamily: FontFamily.mainFont,
-                            ),
-                            prefixIcon: const SelectMedia(),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: borderRadius(30.0),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            disabledBorder: OutlineInputBorder(
-                              borderRadius: borderRadius(30.0),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: borderRadius(30.0),
-                              borderSide: const BorderSide(
-                                color: Color(0xFF176B87),
-                                width: 2.0,
+                        child: ClipRRect(
+                          borderRadius: borderRadius(10),
+                          child: ClipRect(
+                            child: BackdropFilter(
+                              filter:
+                                  ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+                              child: SizedBox(
+                                height: init ? 100 : null,
+                                child: TextField(
+                                  expands: true,
+                                  controller: ai.sendMessageController,
+                                  focusNode: ai.aiChatFocus,
+                                  autofocus: true,
+                                  enabled: !ai.isResponseLoading,
+                                  maxLines: null,
+                                  autocorrect: true,
+                                  scrollPadding: const EdgeInsets.all(5.0),
+                                  onChanged: (String text) {
+                                    textLocale.catchTextLocal(text: text);
+                                  },
+                                  style: TextStyle(
+                                    fontFamily: textLocale.isEnglish
+                                        ? null
+                                        : FontFamily.arabicFont,
+                                    fontWeight: textLocale.isEnglish
+                                        ? FontWeight.bold
+                                        : null,
+                                  ),
+                                  textDirection: textLocale.isEnglish
+                                      ? TextDirection.ltr
+                                      : TextDirection.rtl,
+                                  decoration: InputDecoration(
+                                    constraints: BoxConstraints(
+                                      maxHeight: context.screenHeight * .11,
+                                    ),
+                                    filled: true,
+                                    fillColor:
+                                        SwitchColors.accent.withOpacity(0.6),
+                                    hintText: "Enter a fitness question...",
+                                    hintStyle: const TextStyle(
+                                      fontFamily: FontFamily.mainFont,
+                                    ),
+                                    prefixIcon: const SelectMedia(),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: borderRadius(10.0),
+                                      borderSide:
+                                          const BorderSide(color: Colors.grey),
+                                    ),
+                                    disabledBorder: OutlineInputBorder(
+                                      borderRadius: borderRadius(10.0),
+                                      borderSide:
+                                          const BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: borderRadius(10.0),
+                                      borderSide: BorderSide(
+                                        color: SwitchColors.border,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -145,28 +168,18 @@ class PushMessageToAIWidget extends StatelessWidget {
                   ),
                   const Gap(wRatio: 0.03),
                   CircleAvatar(
-                    backgroundColor: !context.isDark
-                        ? const Color(0xFFA2D2DF)
-                        : const Color(0xFF6eadf9),
+                    backgroundColor: SwitchColors.accent,
                     radius: 27,
                     child: !(ai.isResponseLoading)
                         ? IconButton(
                             onPressed: () async {
                               await ai.sendMessageToGemi(context);
                             },
-                            icon: Icon(Icons.send, color: buttonColor),
+                            icon: Icon(Icons.send,
+                                color: ai.hasData ? SwitchColors.text : null),
                           )
                         : LoadingAnimationWidget.threeRotatingDots(
-                            color: Colors.white,
-                            size: 28.0,
-                          ) /* SizedBox(
-                            width: context.screenWidth * .2,
-                            height: context.screenHeight * .07,
-                            child: Lottie.asset(
-                              "assets/animations/loading_1.json",
-                            ),
-                          ) */
-                    ,
+                            color: Colors.white, size: 28.0),
                   ),
                 ],
               ),

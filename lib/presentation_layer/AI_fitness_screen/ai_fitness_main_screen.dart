@@ -1,5 +1,8 @@
 import 'package:amigo/commons/app_dimensions.dart';
+import 'package:amigo/commons/commons.dart';
+import 'package:amigo/constants/app_colors.dart';
 import 'package:amigo/constants/app_fonts.dart';
+import 'package:amigo/constants/text_styles.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/ai_chat_settings/show_exit_dialog.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/ai_chat_settings/show_settings_dialog.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/chat_widget.dart';
@@ -7,7 +10,7 @@ import 'package:amigo/presentation_layer/AI_fitness_screen/components/select_med
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/start_new_chat.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/push_message_widget.dart';
 import 'package:amigo/statemanagement_layer/change_app_theme/is_dark_mode.dart';
-import 'package:amigo/statemanagement_layer/change_app_theme/set_dark_model_provider.dart';
+import 'package:amigo/statemanagement_layer/change_app_theme/theme_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_fitness_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +35,7 @@ class _AiFitnessMainScreenState extends State<AiFitnessMainScreen> {
 
     manageAi.initializeAIProperties();
 
-    manageAi.sendMessageController.addListener(
+    /* manageAi.sendMessageController.addListener(
       () {
         setState(
           () {
@@ -44,7 +47,7 @@ class _AiFitnessMainScreenState extends State<AiFitnessMainScreen> {
           },
         );
       },
-    );
+    ); */
 
     manageAi.aiScrollController.addListener(
       () {
@@ -58,107 +61,105 @@ class _AiFitnessMainScreenState extends State<AiFitnessMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<DarkModeProvider>(
-      builder: (context, _, __) {
-        return GestureDetector(
-          onTap: () => MedaiDialogManager.hideSelector(),
-          child: Builder(
-            builder: (context) {
-              return PopScope(
-                canPop: false,
-                onPopInvokedWithResult: (didPop, result) async {
-                  if (!didPop) {
-                    await showExitDialog;
-                    return;
-                  }
+    context.watch<ThemeProvider>();
+    context.watch<ManageAiProvider>();
 
-                  if (context.mounted) {
-                    Navigator.pop(context);
-                  }
-                },
-                child: Scaffold(
-                  appBar: AppBar(
-                    backgroundColor: !context.isDark
-                        ? const Color(0xFFEDE8DC)
-                        : const Color(0xFF40534C),
-                    title: const Text(
-                      "AI Fitness",
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: FontFamily.mainFont,
-                      ),
+    return GestureDetector(
+      onTap: () {
+        MedaiDialogManager.hideSelector();
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Builder(
+        builder: (context) {
+          return PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, result) async {
+              if (!didPop) {
+                await showExitDialog;
+                return;
+              }
+
+              if (context.mounted) {
+                Navigator.pop(context);
+              }
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                backgroundColor: !context.isDark
+                    ? const Color(0xFFEDE8DC)
+                    : const Color(0xFF40534C),
+                title: const Text(
+                  appTitle,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: FontFamily.mainFont,
+                  ),
+                ),
+                actions: <Widget>[
+                  IconButton(
+                    onPressed: () async {
+                      await showSettingsDialog;
+                    },
+                    icon: const Icon(
+                      Icons.settings,
+                      color: Colors.black,
                     ),
-                    actions: <Widget>[
-                      
-                      IconButton(
-                        onPressed: () async {
-                          await showSettingsDialog;
-                        },
-                        icon: const Icon(
-                          Icons.settings,
-                          color: Colors.black,
+                  ),
+                ],
+              ),
+              body: Consumer<ManageAiProvider>(
+                builder: (context, chatAI, __) {
+                  //bool isChatEmpty = aiChatHistory.isEmpty;
+                  // bool isHistoryEmpty = chatAI.aiChat!.history.toList().isEmpty;
+
+                  final bool hasHistory =
+                      ManageAiProvider.currentChat.isNotEmpty;
+                  return Stack(
+                    children: <Widget>[
+                      Positioned.fill(
+                        child: hasHistory
+                            ? const AmigoChat()
+                            : const StartNewChatWidget(),
+                      ),
+                      if (hasHistory)
+                        const Positioned(
+                          right: 0,
+                          left: 0,
+                          bottom: 0,
+                          child: PushMessageToAIWidget(),
+                        ),
+                      Positioned(
+                        bottom: context.screenHeight * .11,
+                        right: 0.0,
+                        left: 0.0,
+                        child: Visibility(
+                          visible: !chatAI.isBottomChat &&
+                              ManageAiProvider.currentChat.isNotEmpty,
+                          child: Align(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: SwitchColors.accent.withOpacity(0.8),
+                              ),
+                              child: Clicker(
+                                innerPadding: 10.0,
+                                onClick: () => chatAI.scrollToBottom(),
+                                isCircl: true,
+                                child: const Icon(Icons.arrow_downward),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
-                  ),
-                  body: Consumer<ManageAiProvider>(
-                    builder: (context, chatAI, __) {
-                      //bool isChatEmpty = aiChatHistory.isEmpty;
-                      bool isHistoryEmpty =
-                          chatAI.aiChat!.history.toList().isEmpty;
-                      return Stack(
-                        children: <Widget>[
-                          Positioned.fill(
-                            child: /*  isChatEmpty && */ isHistoryEmpty
-                                ? const StartNewChatWidget()
-                                : const FitnessChatWidget(),
-                          ),
-                          Positioned(
-                            right: 0,
-                            left: 0,
-                            bottom: 0,
-                            child: PushMessageToAIWidget(
-                              buttonColor: buttonColor,
-                            ),
-                          ),
-                          Positioned(
-                            bottom: context.screenHeight * .11,
-                            right: 0,
-                            left: 0,
-                            child: Builder(
-                              builder: (context) {
-                                return Visibility(
-                                  visible: !chatAI.isBottomChat &&
-                                      ManageAiProvider.currentChat.isNotEmpty,
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: () {
-                                        chatAI.scrollToBottom;
-                                      },
-                                      customBorder: const CircleBorder(),
-                                      child: CircleAvatar(
-                                        backgroundColor: const Color(0xFF789DBC)
-                                            .withOpacity(0.6),
-                                        child: const Icon(Icons.arrow_downward),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      },
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

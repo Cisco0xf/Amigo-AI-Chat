@@ -75,7 +75,7 @@ class ShowClearDialog extends StatelessWidget {
                             ),
                           ); */
                         await database.clearChatHistory().whenComplete(() {
-                          Navigator.pop(context);
+                          Navigator.pop(navigatorKey.currentContext!);
                         });
                       },
                       shape: RoundedRectangleBorder(

@@ -22,7 +22,9 @@ class AudioRecording {
     final bool isGraneted = micStatus == PermissionStatus.granted;
 
     if (!isGraneted) {
-      await Permission.microphone.request();
+      await Permission.microphone.request().whenComplete(() async {
+        await initRecording();
+      });
       return false;
     }
 
@@ -126,17 +128,14 @@ class AudioRecording {
   }
 
   Future<void> resumeRecorder() async {
-     if (!_isRecorderReady) {
+    if (!_isRecorderReady) {
       Log.error("Recorder is not ready ...");
       return;
     }
     try {
-
       await audioRecorder.resumeRecorder();
-      
     } catch (error) {
-       Log.error("Pausing error => $error");
-
+      Log.error("Pausing error => $error");
     }
   }
 

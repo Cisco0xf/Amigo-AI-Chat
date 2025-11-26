@@ -21,13 +21,14 @@ class MessageModelAdapter extends TypeAdapter<MessageModel> {
       aiResponse: fields[2] as String,
       messageTime: fields[3] as DateTime,
       userImage: fields[4] as Uint8List?,
+      path: fields[5] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, MessageModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -37,7 +38,9 @@ class MessageModelAdapter extends TypeAdapter<MessageModel> {
       ..writeByte(3)
       ..write(obj.messageTime)
       ..writeByte(4)
-      ..write(obj.userImage);
+      ..write(obj.userImage)
+      ..writeByte(5)
+      ..write(obj.path);
   }
 
   @override
