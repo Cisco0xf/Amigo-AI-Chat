@@ -54,6 +54,7 @@ dependencies:
   syncfusion_flutter_gauges: ^27.1.55
   toastification: ^2.3.0
   url_launcher: ^6.3.1
+  wave_blob: ^1.0.5
 
 dev_dependencies:
   build_runner: ^2.4.13
@@ -74,11 +75,9 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - .env
-    - assets/images/svg/walking/
     - assets/images/svg/fitness_items/
-    - assets/images/svg/BMI/
-    - assets/images/png/
     - assets/images/svg/ai_images/
+    - assets/images/png/
     #animation
     - assets/animations/
   #   - images/a_dot_ham.jpeg

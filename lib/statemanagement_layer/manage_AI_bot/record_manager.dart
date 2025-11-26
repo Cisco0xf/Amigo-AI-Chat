@@ -54,6 +54,10 @@ class AudioRecording {
 
         Log.log("Recorder is Ready now ...");
       });
+
+      audioRecorder.setSubscriptionDuration(
+        const Duration(milliseconds: 500),
+      );
     } catch (error) {
       Log.error("Recorder error => $error");
     }
@@ -63,7 +67,7 @@ class AudioRecording {
 
   Future<void> startRecording() async {
     if (!_isRecorderReady) {
-      Log.log("Recorder is not ready to work...");
+      Log.error("Recorder is not ready ...");
       return;
     }
 
@@ -85,6 +89,10 @@ class AudioRecording {
   // Stop recording
 
   Future<void> finishRecording(BuildContext context) async {
+    if (!_isRecorderReady) {
+      Log.error("Recorder is not ready ...");
+      return;
+    }
     try {
       final String? target = await audioRecorder.stopRecorder();
 
@@ -94,7 +102,10 @@ class AudioRecording {
       }
 
       await Provider.of<PickImage>(context, listen: false)
-          .getRecordedAudioHook(target);
+          .getRecordedAudioHook(target)
+          .whenComplete(
+            () => Navigator.pop(context),
+          );
 
       Log.log("Record has been saved to $target");
     } catch (error) {
@@ -102,5 +113,44 @@ class AudioRecording {
     }
   }
 
+  Future<void> pauseRecorder() async {
+    if (!_isRecorderReady) {
+      Log.error("Recorder is not ready ...");
+      return;
+    }
+    try {
+      await audioRecorder.pauseRecorder();
+    } catch (error) {
+      Log.error("Pausing error => $error");
+    }
+  }
+
+  Future<void> resumeRecorder() async {
+     if (!_isRecorderReady) {
+      Log.error("Recorder is not ready ...");
+      return;
+    }
+    try {
+
+      await audioRecorder.resumeRecorder();
+      
+    } catch (error) {
+       Log.error("Pausing error => $error");
+
+    }
+  }
+
   // Dispose the recorder
+
+  Future<void> canelRecording() async {
+    if (!_isRecorderReady) {
+      Log.error("Recorder is not ready ...");
+      return;
+    }
+    try {
+      await audioRecorder.closeRecorder();
+    } catch (error) {
+      Log.error("Error cancel => $error");
+    }
+  }
 }

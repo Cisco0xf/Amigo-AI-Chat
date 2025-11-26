@@ -142,7 +142,13 @@ class PickImage extends ChangeNotifier {
   Future<void> clearAudio() async {
     loadedAudio = null;
     audioPath = null;
-    await context.read<ManageAudioProvider>().pauseAudio();
+    //await context.read<ManageAudioProvider>().pauseAudio();
     notifyListeners();
+  }
+
+  void clearOldAudioBeforeAddingNewOne() {
+    if (loadedAudio != null || audioPath != null) {
+      clearAudio();
+    }
   }
 }

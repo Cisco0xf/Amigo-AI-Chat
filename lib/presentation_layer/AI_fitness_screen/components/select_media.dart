@@ -12,6 +12,10 @@ class MedaiDialogManager {
   static final OverlayPortalController controller = OverlayPortalController();
 
   static void showSelector() {
+    if (controller.isShowing) {
+      hideSelector();
+      return;
+    }
     controller.show();
   }
 
@@ -85,6 +89,10 @@ class SelectMedia extends StatelessWidget {
                                 icon: Icons.multitrack_audio_rounded,
                                 label: "Audio file",
                                 onTap: () async {
+                                  context
+                                      .read<PickImage>()
+                                      .clearOldAudioBeforeAddingNewOne();
+
                                   await context
                                       .read<PickImage>()
                                       .loadAudioFronStorage()
@@ -98,6 +106,12 @@ class SelectMedia extends StatelessWidget {
                                 icon: Icons.mic,
                                 label: "Record Audio",
                                 onTap: () async {
+                                  MedaiDialogManager.hideSelector();
+
+                                  context
+                                      .read<PickImage>()
+                                      .clearOldAudioBeforeAddingNewOne();
+
                                   await showRecordingDialog(context);
                                 },
                               ),

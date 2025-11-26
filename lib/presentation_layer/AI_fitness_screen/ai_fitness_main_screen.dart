@@ -1,19 +1,15 @@
 import 'package:amigo/commons/app_dimensions.dart';
 import 'package:amigo/constants/app_fonts.dart';
-import 'package:amigo/commons/commons.dart';
-import 'package:amigo/constants/gaps.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/ai_chat_settings/show_exit_dialog.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/ai_chat_settings/show_settings_dialog.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/chat_widget.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/select_media.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/start_new_chat.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/push_message_widget.dart';
-import 'package:amigo/presentation_layer/BMI_calculator/BMI_screen/bmi_screen.dart';
 import 'package:amigo/statemanagement_layer/change_app_theme/is_dark_mode.dart';
 import 'package:amigo/statemanagement_layer/change_app_theme/set_dark_model_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_fitness_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class AiFitnessMainScreen extends StatefulWidget {
@@ -94,31 +90,7 @@ class _AiFitnessMainScreenState extends State<AiFitnessMainScreen> {
                       ),
                     ),
                     actions: <Widget>[
-                      Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(10.0),
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return const BMIMainScreen();
-                                },
-                              ),
-                            );
-                          },
-                          child: Padding(
-                            padding: padding(10.0),
-                            child: SizedBox.square(
-                              dimension: context.screenWidth * .1,
-                              child: SvgPicture.asset(
-                                "assets/images/svg/fitness_items/BMI.svg",
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const Gap(wRatio: 0.02),
+                      
                       IconButton(
                         onPressed: () async {
                           await showSettingsDialog;
