@@ -1,6 +1,6 @@
 import 'package:amigo/statemanagement_layer/catch_text_local/catch_text_locale.dart';
 import 'package:amigo/statemanagement_layer/change_app_theme/theme_provider.dart';
-import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_fitness_provider.dart';
+import 'package:amigo/statemanagement_layer/manage_AI_bot/amigo_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_settings_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/pick_image.dart';
 import 'package:provider/provider.dart';

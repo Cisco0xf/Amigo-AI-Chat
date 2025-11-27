@@ -9,7 +9,7 @@ import 'package:amigo/presentation_layer/AI_fitness_screen/components/full_image
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/select_media.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/wavy_audio.dart';
 import 'package:amigo/statemanagement_layer/catch_text_local/catch_text_locale.dart';
-import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_fitness_provider.dart';
+import 'package:amigo/statemanagement_layer/manage_AI_bot/amigo_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/pick_image.dart';
 import 'package:auto_lang_field/auto_lang_field.dart';
 import 'package:auto_lang_field/constants/enums.dart';

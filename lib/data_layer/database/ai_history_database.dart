@@ -47,7 +47,7 @@ class AiHistoryDatabase implements LocalRepository {
 import 'package:amigo/commons/my_logger.dart';
 import 'package:amigo/commons/navigation_key.dart';
 import 'package:amigo/data_layer/ai_models/ai_history_model.dart';
-import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_fitness_provider.dart';
+import 'package:amigo/statemanagement_layer/manage_AI_bot/amigo_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';

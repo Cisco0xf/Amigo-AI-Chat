@@ -8,7 +8,7 @@ import 'package:amigo/commons/commons.dart';
 import 'package:amigo/data_layer/ai_models/ai_history_model.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/ai_chat_settings/show_clear_dialog.dart';
 import 'package:amigo/statemanagement_layer/change_app_theme/theme_provider.dart';
-import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_fitness_provider.dart';
+import 'package:amigo/statemanagement_layer/manage_AI_bot/amigo_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

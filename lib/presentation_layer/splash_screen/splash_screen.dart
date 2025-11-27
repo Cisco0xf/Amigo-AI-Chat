@@ -5,7 +5,7 @@ import 'package:amigo/constants/assets.dart';
 import 'package:amigo/constants/texts.dart';
 import 'package:amigo/data_layer/database/ai_history_database.dart';
 import 'package:amigo/data_layer/save_last_data/save_prefs.dart';
-import 'package:amigo/presentation_layer/AI_fitness_screen/ai_fitness_main_screen.dart';
+import 'package:amigo/presentation_layer/AI_fitness_screen/ai_main_screen.dart';
 import 'package:amigo/statemanagement_layer/change_app_theme/is_dark_mode.dart';
 import 'package:amigo/statemanagement_layer/change_app_theme/theme_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_settings_provider.dart';

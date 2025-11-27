@@ -5,7 +5,7 @@ import 'package:amigo/commons/commons.dart';
 import 'package:amigo/constants/app_colors.dart';
 import 'package:amigo/constants/gaps.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/recording_dialog.dart';
-import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_fitness_provider.dart';
+import 'package:amigo/statemanagement_layer/manage_AI_bot/amigo_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/pick_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
