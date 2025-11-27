@@ -1,5 +1,6 @@
+import 'package:auto_lang_field/constants/enums.dart';
 import 'package:flutter/material.dart';
-
+/* 
 final RegExp english = RegExp(r'^[a-zA-Z]+');
 final RegExp arabic = RegExp(r'^[\u0621-\u064A]+');
 
@@ -15,8 +16,8 @@ class CatchTextLocalProvider with ChangeNotifier {
 
     notifyListeners();
   }
-}
-
+} */
+/* 
 extension TextLocale on String {
   bool get isArabicText {
     if (arabic.hasMatch(this)) {
@@ -25,4 +26,15 @@ extension TextLocale on String {
       return false;
     }
   }
+}
+ */
+class DetectLanguage extends ChangeNotifier {
+  
+  LanguageCode current = LanguageCode.en;
+
+  void catchInputLangCode(LanguageCode code) {
+    current = code;
+    notifyListeners();
+  }
+
 }

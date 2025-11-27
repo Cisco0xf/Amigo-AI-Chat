@@ -1,17 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:amigo/commons/my_logger.dart';
 import 'package:amigo/commons/navigation_key.dart';
 import 'package:amigo/constants/api_constants.dart';
-import 'package:amigo/constants/text_styles.dart';
+import 'package:amigo/constants/texts.dart';
 import 'package:amigo/data_layer/ai_models/ai_history_model.dart';
 import 'package:amigo/data_layer/database/ai_history_database.dart';
-import 'package:amigo/data_layer/save_last_data/save_prefs.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/show_error_dialog.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_settings_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/pick_image.dart';
@@ -28,7 +26,7 @@ class ManageAiProvider with ChangeNotifier {
 
   final FocusNode aiChatFocus = FocusNode(debugLabel: "AI message request");
 
-  bool get hasData => sendMessageController.text.trim().isNotEmpty; 
+  bool get hasData => sendMessageController.text.trim().isNotEmpty;
 
   // Scroll to bottom in case the animated text is on
 
@@ -42,7 +40,7 @@ class ManageAiProvider with ChangeNotifier {
         Timer.periodic(
           const Duration(milliseconds: 100),
           (Timer timer) {
-            log("Scrolling Down.....");
+            // log("Scrolling Down.....");
 
             // resultTextIndex++;
 
@@ -146,8 +144,6 @@ class ManageAiProvider with ChangeNotifier {
   GenerativeModel? gemiAI;
 
   void initializeAIProperties() {
-     
-
     gemiAI = GenerativeModel(
       model: APIConstants.model,
       apiKey: APIConstants.geminiApiKey,
@@ -248,7 +244,13 @@ class ManageAiProvider with ChangeNotifier {
         picker.clearAudio();
       }
 
-      await ManageChatHistoryDb.addNewMessage(msg: chatMessage);
+      await ManageChatHistoryDb.addNewMessage(msg: chatMessage).whenComplete(
+        () {
+          Log.log("Message has been added to database...");
+          Log.log("User Message => $message");
+          Log.log("AI Response => ${chatMessage.aiResponse}");
+        },
+      );
 
       // Scroll to Bottom according to the Animted Text bool value
 
@@ -273,6 +275,7 @@ class ManageAiProvider with ChangeNotifier {
 
   Future<void> clearChatHistory() async {
     currentChat = [];
+    aiChat = gemiAI!.startChat(history: []);
     notifyListeners();
 
     await ManageChatHistoryDb.clearDb();

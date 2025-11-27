@@ -3,7 +3,6 @@ import 'package:amigo/data_layer/ai_models/ai_history_model.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/message_widget.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_fitness_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:provider/provider.dart';
 
 class AmigoChat extends StatelessWidget {

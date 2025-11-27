@@ -119,7 +119,7 @@ class ManageChatHistoryDb {
 
     try {
       await _chatHistory.addMessageToDatabase(box: box, message: msg);
-      Log.log("Message has been added to database...");
+      
     } catch (error) {
       Log.error('Adding New DB mesg Error => $error');
     }

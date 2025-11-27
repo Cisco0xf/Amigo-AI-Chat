@@ -5,10 +5,8 @@ import 'package:amigo/constants/app_colors.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:amigo/commons/app_dimensions.dart';
 import 'package:amigo/commons/commons.dart';
-import 'package:amigo/commons/my_logger.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:provider/provider.dart';
 
 class WavyAudio extends StatefulWidget {
   const WavyAudio({

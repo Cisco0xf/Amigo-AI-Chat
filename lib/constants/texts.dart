@@ -1,4 +1,3 @@
-class AppTextStyles {}
 
 const String errorMsg =
     "Something goes wrong while the request, please try again.";
@@ -20,3 +19,5 @@ const String micPermission =
     "App needs microphone permission to start recording";
 
 const String appTitle = "Amigo.ai";
+
+const String exitQ ="Would you like to exit the app ?";

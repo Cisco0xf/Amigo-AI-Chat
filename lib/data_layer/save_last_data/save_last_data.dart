@@ -73,24 +73,3 @@ class SaveAnimatedTextBoolValue implements SaveUserChanges {
     return isTextAnimated;
   }
 }
-/* 
-class SaveAppMode implements SaveUserChanges {
-  final String _modekey = "MODE_KEY";
-
-  @override
-  Future<void> putDataInDatabase({required dynamic data}) async {
-    final SharedPreferences modePref = await SharedPreferences.getInstance();
-
-    await modePref.setBool(_modekey, data);
-  }
-
-  @override
-  Future<dynamic> get getDataFromDatabase async {
-    final SharedPreferences modePref = await SharedPreferences.getInstance();
-
-    bool isDarkFromDatabase = modePref.getBool(_modekey) ?? false;
-
-    return isDarkFromDatabase;
-  }
-}
- */

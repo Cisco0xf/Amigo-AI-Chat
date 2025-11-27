@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:amigo/commons/my_logger.dart';
 import 'package:amigo/commons/show_toastification.dart';
-import 'package:amigo/constants/text_styles.dart';
+import 'package:amigo/constants/texts.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/pick_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';

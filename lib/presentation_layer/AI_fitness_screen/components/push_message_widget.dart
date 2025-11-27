@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:ui';
 
 import 'package:amigo/commons/app_dimensions.dart';
@@ -10,14 +9,13 @@ import 'package:amigo/presentation_layer/AI_fitness_screen/components/full_image
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/select_media.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/wavy_audio.dart';
 import 'package:amigo/statemanagement_layer/catch_text_local/catch_text_locale.dart';
-import 'package:amigo/statemanagement_layer/change_app_theme/is_dark_mode.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_fitness_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/pick_image.dart';
+import 'package:auto_lang_field/auto_lang_field.dart';
+import 'package:auto_lang_field/constants/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:audio_waveforms/audio_waveforms.dart';
 
 class PushMessageToAIWidget extends StatelessWidget {
   const PushMessageToAIWidget({super.key, this.init = false});
@@ -95,8 +93,9 @@ class PushMessageToAIWidget extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  Consumer<CatchTextLocalProvider>(
+                  Consumer<DetectLanguage>(
                     builder: (context, textLocale, _) {
+                      final bool isEn = textLocale.current == LanguageCode.en;
                       return Expanded(
                         child: ClipRRect(
                           borderRadius: borderRadius(10),
@@ -106,8 +105,9 @@ class PushMessageToAIWidget extends StatelessWidget {
                                   ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
                               child: SizedBox(
                                 height: init ? 100 : null,
-                                child: TextField(
+                                child: AutoLangField(
                                   expands: true,
+                                  keyboardType: TextInputType.multiline,
                                   controller: ai.sendMessageController,
                                   focusNode: ai.aiChatFocus,
                                   autofocus: true,
@@ -116,17 +116,41 @@ class PushMessageToAIWidget extends StatelessWidget {
                                   autocorrect: true,
                                   scrollPadding: const EdgeInsets.all(5.0),
                                   onChanged: (String text) {
-                                    textLocale.catchTextLocal(text: text);
+                                    //  textLocale.catchTextLocal(text: text);
                                   },
-                                  style: TextStyle(
+                                  onLanguageDetected: (value, detectedLang) {
+                                    context
+                                        .read<DetectLanguage>()
+                                        .catchInputLangCode(
+                                            detectedLang!.langCode);
+                                  },
+                                  supportedLanguages: const [
+                                    LanguageCode.ar,
+                                    LanguageCode.en,
+                                  ],
+                                  textPropertiesPerLanguage: const {
+                                    LanguageCode.ar: TextProperties(
+                                      style: TextStyle(
+                                        fontFamily: FontFamily.arabicFont,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    LanguageCode.en: TextProperties(
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  },
+
+                                  /* style: TextStyle(
                                     fontFamily: textLocale.isEnglish
                                         ? null
                                         : FontFamily.arabicFont,
                                     fontWeight: textLocale.isEnglish
                                         ? FontWeight.bold
                                         : null,
-                                  ),
-                                  textDirection: textLocale.isEnglish
+                                  ), */
+                                  textDirection: isEn
                                       ? TextDirection.ltr
                                       : TextDirection.rtl,
                                   decoration: InputDecoration(

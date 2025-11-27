@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:amigo/constants/app_colors.dart';
 import 'package:amigo/constants/assets.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/full_image_dialog.dart';
@@ -11,16 +9,14 @@ import 'package:amigo/commons/show_toastification.dart';
 import 'package:amigo/constants/app_fonts.dart';
 import 'package:amigo/commons/commons.dart';
 import 'package:amigo/constants/gaps.dart';
-import 'package:amigo/constants/text_styles.dart';
+import 'package:amigo/constants/texts.dart';
 import 'package:amigo/data_layer/ai_models/ai_history_model.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/wavy_audio.dart';
-import 'package:amigo/statemanagement_layer/change_app_theme/is_dark_mode.dart';
 import 'package:amigo/statemanagement_layer/change_app_theme/theme_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_fitness_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 
@@ -109,6 +105,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                 message,
                 style: const TextStyle(
                   fontFamily: FontFamily.mainFont,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],

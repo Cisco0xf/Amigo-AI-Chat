@@ -22,136 +22,133 @@ class AISettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>(
-      builder: (context, _, __) {
-        return Consumer<AiSettingsProvider>(
-          builder: (context, settings, _) {
-            return SingleChildScrollView(
-              child: Padding(
-                padding: padding(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
+    context.watch<ThemeProvider>();
+    return Consumer<AiSettingsProvider>(
+      builder: (context, settings, _) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: padding(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const Text(
+                  "AI Settings",
+                  style: TextStyle(
+                    fontSize: 23,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: FontFamily.mainFont,
+                  ),
+                ),
+                const Divider(
+                  indent: 70,
+                  endIndent: 70,
+                ),
+                const IsTextAnimatedWidget(),
+                const DarkModeWidget(),
+                const Divider(),
+                ChangeValueWidget(
+                  title: "AI Creativity",
+                  label: settings.creativitySliderLable.$1,
+                  description: settings.creativitySliderLable.$2,
+                  min: 0.0,
+                  value: (settings.creativityValue / 2) * 100,
+                  max: 100,
+                  isCreativity: true,
+                  onChanged: (double temperature) {
+                    settings.changeCreativityVlaue(
+                      selectedCreativity: temperature,
+                    );
+                  },
+                  color: 0xFFF6EFBD,
+                  imagePath: Assets.creativity,
+                ),
+                const Gap(hRatio: 0.02),
+                ChangeValueWidget(
+                  title: "Output length",
+                  label: settings.outputLengthSliderLabel.$1,
+                  description: settings.outputLengthSliderLabel.$2,
+                  min: 100,
+                  value: settings.outputLengthValue.toDouble(),
+                  max: 8192,
+                  onChanged: (double length) {
+                    settings.changeOutputLength(
+                      selectedLength: length.toInt(),
+                    );
+                  },
+                  color: 0xFFB9E5E8,
+                  imagePath: Assets.output,
+                ),
+                const Gap(hRatio: 0.02),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    const Text(
-                      "AI Settings",
-                      style: TextStyle(
-                        fontSize: 23,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: FontFamily.mainFont,
+                    SizedBox(
+                      width: context.screenWidth * .2,
+                      height: context.screenHeight * .06,
+                      child: MaterialButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          showToastification(
+                            title: "Settings has been saved successfully",
+                            type: ToastificationType.success,
+                          );
+                        },
+                        color: SwitchColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: borderRadius(25.0),
+                        ),
+                        child: const Text("Ok"),
                       ),
                     ),
-                    const Divider(
-                      indent: 70,
-                      endIndent: 70,
-                    ),
-                    const IsTextAnimatedWidget(),
-                    const DarkModeWidget(),
-                    const Divider(),
-                    ChangeValueWidget(
-                      title: "AI Creativity",
-                      label: settings.creativitySliderLable.$1,
-                      description: settings.creativitySliderLable.$2,
-                      min: 0.0,
-                      value: (settings.creativityValue / 2) * 100,
-                      max: 100,
-                      isCreativity: true,
-                      onChanged: (double temperature) {
-                        settings.changeCreativityVlaue(
-                          selectedCreativity: temperature,
-                        );
-                      },
-                      color: 0xFFF6EFBD,
-                      imagePath: Assets.creativity,
-                    ),
-                    const Gap(hRatio: 0.02),
-                    ChangeValueWidget(
-                      title: "Output length",
-                      label: settings.outputLengthSliderLabel.$1,
-                      description: settings.outputLengthSliderLabel.$2,
-                      min: 100,
-                      value: settings.outputLengthValue.toDouble(),
-                      max: 8192,
-                      onChanged: (double length) {
-                        settings.changeOutputLength(
-                          selectedLength: length.toInt(),
-                        );
-                      },
-                      color: 0xFFB9E5E8,
-                      imagePath: Assets.output,
-                    ),
-                    const Gap(hRatio: 0.02),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        SizedBox(
-                          width: context.screenWidth * .2,
-                          height: context.screenHeight * .06,
-                          child: MaterialButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              showToastification(
-                                title: "Settings has been saved successfully",
-                                type: ToastificationType.success,
-                              );
-                            },
-                            color: const Color(0xFF708871),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: borderRadius(25.0),
-                            ),
-                            child: const Text("Ok"),
-                          ),
+                    const Gap(wRatio: 0.03),
+                  ],
+                ),
+                const Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Gap(wRatio: 0.03),
+                    SizedBox(
+                      width: context.screenWidth * .4,
+                      height: context.screenHeight * .06,
+                      child: MaterialButton(
+                        onPressed: () async {
+                          if (_chatHistory.isEmpty) {
+                            return;
+                          }
+                          Navigator.pop(context);
+                          await showClearDialog;
+                        },
+                        color: _chatHistory.isNotEmpty
+                            ? const Color(0xFFC62E2E)
+                            : const Color(0xFF9e9e9e),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: borderRadius(25.0),
                         ),
-                        const Gap(wRatio: 0.03),
-                      ],
-                    ),
-                    const Divider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        const Gap(wRatio: 0.03),
-                        SizedBox(
-                          width: context.screenWidth * .4,
-                          height: context.screenHeight * .06,
-                          child: MaterialButton(
-                            onPressed: () async {
-                              if (_chatHistory.isEmpty) {
-                                return;
-                              }
-                              Navigator.pop(context);
-                              await showClearDialog;
-                            },
-                            color: _chatHistory.isNotEmpty
-                                ? const Color(0xFFC62E2E)
-                                : const Color(0xFF9e9e9e),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: borderRadius(25.0),
+                        child: const Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.delete,
+                              color: Colors.white,
                             ),
-                            child: const Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.delete,
-                                  color: Colors.white,
-                                ),
-                                Gap(wRatio: 0.02),
-                                Text(
-                                  "Clear Chat",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
+                            Gap(wRatio: 0.02),
+                            Text(
+                              "Clear Chat",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-            );
-          },
+              ],
+            ),
+          ),
         );
       },
     );
@@ -224,7 +221,8 @@ class ChangeValueWidget extends StatelessWidget {
               height: context.screenHeight * .05,
               decoration: BoxDecoration(
                 borderRadius: borderRadius(8.0),
-                color: ColorsSwitcher.mainColor,
+                color: SwitchColors.bgColor,
+                border: Border.all(color: SwitchColors.border),
                 boxShadow: mainBoxShadow(),
               ),
               child: SliderTheme(
@@ -261,10 +259,10 @@ class ChangeValueWidget extends StatelessWidget {
                     ),
                     TextSpan(
                       text: description,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15,
                         fontFamily: FontFamily.mainFont,
-                        color: Color(0xFF9e9e9e),
+                        color: SwitchColors.text,
                       ),
                     ),
                   ],

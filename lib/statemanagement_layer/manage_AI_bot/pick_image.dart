@@ -4,12 +4,10 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:amigo/commons/my_logger.dart';
 import 'package:amigo/commons/show_toastification.dart';
-import 'package:amigo/constants/text_styles.dart';
-import 'package:amigo/presentation_layer/AI_fitness_screen/components/wavy_audio.dart';
+import 'package:amigo/constants/texts.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 
 enum UpdateType {

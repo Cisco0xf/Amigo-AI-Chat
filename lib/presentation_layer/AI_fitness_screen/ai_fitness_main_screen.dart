@@ -2,7 +2,7 @@ import 'package:amigo/commons/app_dimensions.dart';
 import 'package:amigo/commons/commons.dart';
 import 'package:amigo/constants/app_colors.dart';
 import 'package:amigo/constants/app_fonts.dart';
-import 'package:amigo/constants/text_styles.dart';
+import 'package:amigo/constants/texts.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/ai_chat_settings/show_exit_dialog.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/ai_chat_settings/show_settings_dialog.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/chat_widget.dart';
@@ -110,9 +110,6 @@ class _AiFitnessMainScreenState extends State<AiFitnessMainScreen> {
               ),
               body: Consumer<ManageAiProvider>(
                 builder: (context, chatAI, __) {
-                  //bool isChatEmpty = aiChatHistory.isEmpty;
-                  // bool isHistoryEmpty = chatAI.aiChat!.history.toList().isEmpty;
-
                   final bool hasHistory =
                       ManageAiProvider.currentChat.isNotEmpty;
                   return Stack(
@@ -130,26 +127,40 @@ class _AiFitnessMainScreenState extends State<AiFitnessMainScreen> {
                           child: PushMessageToAIWidget(),
                         ),
                       Positioned(
-                        bottom: context.screenHeight * .11,
+                        bottom: context.screenHeight * .13,
                         right: 0.0,
                         left: 0.0,
-                        child: Visibility(
-                          visible: !chatAI.isBottomChat &&
-                              ManageAiProvider.currentChat.isNotEmpty,
-                          child: Align(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: SwitchColors.accent.withOpacity(0.8),
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          transitionBuilder: (child, animation) {
+                            return ScaleTransition(
+                              scale: animation,
+                              child: FadeTransition(
+                                opacity: animation,
+                                child: child,
                               ),
-                              child: Clicker(
-                                innerPadding: 10.0,
-                                onClick: () => chatAI.scrollToBottom(),
-                                isCircl: true,
-                                child: const Icon(Icons.arrow_downward),
-                              ),
-                            ),
-                          ),
+                            );
+                          },
+                          child: !chatAI.isBottomChat &&
+                                  ManageAiProvider.currentChat.isNotEmpty
+                              ? Align(
+                                  key: const ValueKey("MJNIS_-NDIkdm948"),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color:
+                                          SwitchColors.accent.withOpacity(0.8),
+                                    ),
+                                    child: Clicker(
+                                      innerPadding: 10.0,
+                                      onClick: () => chatAI.scrollToBottom(),
+                                      isCircl: true,
+                                      child: const Icon(Icons.arrow_downward),
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox.shrink(
+                                  key: ValueKey("MBDIBEI-mfignfr")),
                         ),
                       ),
                     ],

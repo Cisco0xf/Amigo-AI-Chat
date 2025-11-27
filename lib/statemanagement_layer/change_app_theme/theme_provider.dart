@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:amigo/constants/app_colors.dart';
 import 'package:amigo/data_layer/save_last_data/save_prefs.dart';

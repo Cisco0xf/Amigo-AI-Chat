@@ -1,10 +1,11 @@
+import 'package:amigo/commons/commons.dart';
 import 'package:amigo/constants/assets.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/push_message_widget.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:amigo/commons/app_dimensions.dart';
 import 'package:amigo/constants/app_fonts.dart';
 import 'package:amigo/constants/gaps.dart';
-import 'package:amigo/constants/text_styles.dart';
+import 'package:amigo/constants/texts.dart';
 import 'package:flutter/material.dart';
 
 class StartNewChatWidget extends StatelessWidget {
@@ -15,6 +16,7 @@ class StartNewChatWidget extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
+          const Gap(height: 10.0),
           /* TweenAnimationBuilder(
             tween: Tween<double>(begin: .5, end: .9),
             duration: const Duration(milliseconds: 2300),
@@ -49,16 +51,20 @@ class StartNewChatWidget extends StatelessWidget {
             ),
           ),
           const Gap(hRatio: 0.01),
-          const Text(
-            subWelcome,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              fontFamily: FontFamily.mainFont,
+          Padding(
+            padding: padding(10.0),
+            child: const Text(
+              subWelcome,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                fontFamily: FontFamily.mainFont,
+              ),
             ),
           ),
           const Gap(hRatio: 0.01),
           const PushMessageToAIWidget(init: true),
+          const Gap(height: 30.0),
         ],
       ),
     );
@@ -108,7 +114,7 @@ class _AnimatedLogoState extends State<AnimatedLogo>
         return Transform.translate(
           offset: Offset(0.0, -_animation.value),
           child: SizedBox(
-            height: context.screenHeight * .4,
+            height: context.screenHeight * .35,
             width: context.screenWidth * .8,
             child: Image.asset(Assets.logo),
           ),

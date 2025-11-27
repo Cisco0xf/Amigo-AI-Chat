@@ -3,8 +3,7 @@ import 'package:amigo/commons/navigation_key.dart';
 import 'package:amigo/constants/app_fonts.dart';
 import 'package:amigo/commons/commons.dart';
 import 'package:amigo/constants/gaps.dart';
-import 'package:amigo/constants/text_styles.dart';
-import 'package:amigo/presentation_layer/AI_fitness_screen/ai_fitness_main_screen.dart';
+import 'package:amigo/constants/texts.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_fitness_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,9 +24,8 @@ class ShowClearDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      insetPadding: const EdgeInsets.symmetric(
-        horizontal: 15,
-      ),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 15),
+      shape: RoundedRectangleBorder(borderRadius: borderRadius(10.0)),
       child: Padding(
         padding: padding(10),
         child: Column(
@@ -55,7 +53,7 @@ class ShowClearDialog extends StatelessWidget {
                     },
                     style: OutlinedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                        borderRadius: borderRadius(25),
+                        borderRadius: borderRadius(30.0),
                       ),
                     ),
                     child: const Text("No"),
@@ -67,19 +65,12 @@ class ShowClearDialog extends StatelessWidget {
                     height: context.screenHeight * .07,
                     child: MaterialButton(
                       onPressed: () async {
-                        /* Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const AiFitnessMainScreen();
-                              },
-                            ),
-                          ); */
                         await database.clearChatHistory().whenComplete(() {
                           Navigator.pop(navigatorKey.currentContext!);
                         });
                       },
                       shape: RoundedRectangleBorder(
-                        borderRadius: borderRadius(25),
+                        borderRadius: borderRadius(30.0),
                       ),
                       color: const Color(0xFFC62E2E),
                       child: const Text("Delete"),

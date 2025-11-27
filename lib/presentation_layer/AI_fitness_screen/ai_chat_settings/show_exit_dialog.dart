@@ -2,6 +2,7 @@ import 'package:amigo/commons/navigation_key.dart';
 import 'package:amigo/constants/app_fonts.dart';
 import 'package:amigo/commons/commons.dart';
 import 'package:amigo/constants/gaps.dart';
+import 'package:amigo/constants/texts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -24,7 +25,7 @@ Future<void> get showExitDialog async {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               const Text(
-                "Would you like to exit the app ?",
+                exitQ,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 19,

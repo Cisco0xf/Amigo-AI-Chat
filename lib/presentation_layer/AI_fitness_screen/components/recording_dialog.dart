@@ -119,7 +119,7 @@ class _RecordingDialogState extends State<RecordingDialog> {
 
                     setState(() => isRecording = !isRecording);
                   },
-                  onProgress: _recorder.audioRecorder.onProgress,
+                /*   onProgress: _recorder.audioRecorder.onProgress, */
                 ),
                 RecordingControllers(
                   onCancel: () async {
@@ -145,18 +145,26 @@ class _RecordingDialogState extends State<RecordingDialog> {
   }
 }
 
-class RecordingButton extends StatelessWidget {
+class RecordingButton extends StatefulWidget {
   const RecordingButton({
     super.key,
-    required this.onProgress,
+    /* required this.onProgress, */
     required this.onRecord,
     required this.isRecording,
   });
 
   final void Function() onRecord;
-  final Stream<RecordingDisposition>? onProgress;
+  /* final Stream<RecordingDisposition>? onProgress; */
 
   final bool isRecording;
+
+  @override
+  State<RecordingButton> createState() => _RecordingButtonState();
+}
+
+class _RecordingButtonState extends State<RecordingButton> {
+  int seconds = 0;
+  int minutes = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +181,7 @@ class RecordingButton extends StatelessWidget {
             SizedBox.square(
               dimension: context.screenHeight * .08,
               child: Clicker(
-                onClick: onRecord,
+                onClick: widget.onRecord,
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: borderRadius(10.0),
@@ -193,7 +201,7 @@ class RecordingButton extends StatelessWidget {
                         ),
                       );
                     },
-                    child: isRecording
+                    child: widget.isRecording
                         ? const Icon(Icons.stop_rounded,
                             key: ValueKey("MNSJLJKDJ-msin"))
                         : const Icon(Icons.mic,
@@ -202,8 +210,8 @@ class RecordingButton extends StatelessWidget {
                 ),
               ),
             ),
-            StreamBuilder(
-              stream: /* recorder.audioRecorder. */ onProgress,
+            /* StreamBuilder(
+              stream: widget.onProgress,
               builder: (context, snapshot) {
                 const TextStyle style = TextStyle(
                   fontSize: 14,
@@ -224,7 +232,35 @@ class RecordingButton extends StatelessWidget {
 
                 return const Text("00:00", style: style);
               },
-            ),
+            ), */
+            StreamBuilder(
+              stream: Stream.periodic(
+                const Duration(seconds: 1),
+                (_) {
+                  if (!widget.isRecording) {
+                    return;
+                  }
+
+                  seconds += 1;
+
+                  if (seconds >= 60) {
+                    seconds = 0;
+                    minutes++;
+                  }
+                },
+              ),
+              builder: (context, snapshot) {
+                final String timer =
+                    "${minutes.timerFormatter}:${seconds.timerFormatter}";
+                return Text(
+                  timer,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              },
+            )
           ],
         ),
       ),

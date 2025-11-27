@@ -5,6 +5,7 @@ import 'package:amigo/commons/commons.dart';
 import 'package:amigo/constants/app_colors.dart';
 import 'package:amigo/constants/gaps.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/recording_dialog.dart';
+import 'package:amigo/statemanagement_layer/manage_AI_bot/ai_fitness_provider.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/pick_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,21 +16,30 @@ class MedaiDialogManager {
   the messages History cash
   
    */
-  static final OverlayPortalController controller = OverlayPortalController();
+
+  static final OverlayPortalController _initController =
+      OverlayPortalController();
+
+  static final OverlayPortalController _controller = OverlayPortalController();
+
+  static bool get _hasChat => ManageAiProvider.currentChat.isNotEmpty;
+
+  static OverlayPortalController get mediaDialogController =>
+      _hasChat ? _controller : _initController;
 
   static void showSelector() {
-    if (controller.isShowing) {
+    if (mediaDialogController.isShowing) {
       hideSelector();
       return;
     }
-    controller.show();
+    mediaDialogController.show();
   }
 
   static void hideSelector() {
-    if (!controller.isShowing) {
+    if (!mediaDialogController.isShowing) {
       return;
     }
-    controller.hide();
+    mediaDialogController.hide();
   }
 }
 
@@ -39,7 +49,7 @@ class SelectMedia extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OverlayPortal(
-      controller: MedaiDialogManager.controller,
+      controller: MedaiDialogManager.mediaDialogController,
       overlayChildBuilder: (context) {
         return TweenAnimationBuilder(
           duration: const Duration(milliseconds: 300),

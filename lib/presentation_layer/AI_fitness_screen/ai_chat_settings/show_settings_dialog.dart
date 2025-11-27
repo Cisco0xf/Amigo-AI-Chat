@@ -7,6 +7,8 @@ Future<void> get showSettingsDialog async {
   final BuildContext context = navigatorKey.currentContext!;
   await showGeneralDialog(
     context: context,
+    barrierDismissible: true,
+    barrierLabel: "",
     transitionDuration: const Duration(milliseconds: 350),
     pageBuilder: (context, animation, secondaryAnimation) => const SizedBox(),
     transitionBuilder: (context, animation, secondaryAnimation, child) {
