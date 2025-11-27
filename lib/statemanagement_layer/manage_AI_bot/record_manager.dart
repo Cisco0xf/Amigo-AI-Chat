@@ -103,7 +103,7 @@ class AudioRecording {
         return;
       }
 
-      await Provider.of<PickImage>(context, listen: false)
+      await Provider.of<PickMediaProvider>(context, listen: false)
           .getRecordedAudioHook(target)
           .whenComplete(
             () => Navigator.pop(context),

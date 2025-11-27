@@ -10,7 +10,6 @@ import 'package:amigo/constants/gaps.dart';
 import 'package:amigo/statemanagement_layer/manage_AI_bot/record_manager.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:wave_blob/wave_blob.dart';
 

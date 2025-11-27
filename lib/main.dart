@@ -5,6 +5,7 @@ import 'package:amigo/presentation_layer/splash_screen/splash_screen.dart';
 import 'package:amigo/statemanagement_layer/app_providers.dart';
 import 'package:amigo/statemanagement_layer/change_app_theme/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,13 @@ Future<void> main() async {
   Hive.registerAdapter(MessageModelAdapter());
 
   runApp(const AmigoRoot());
+
+  SystemChrome.setPreferredOrientations(
+    <DeviceOrientation>[
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ],
+  );
 }
 
 class AmigoRoot extends StatelessWidget {

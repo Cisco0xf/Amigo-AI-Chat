@@ -9,7 +9,7 @@ import 'package:provider/single_child_widget.dart';
 List<SingleChildWidget> get appProviders {
   List<SingleChildWidget> providers = <SingleChildWidget>[
     ChangeNotifierProvider(create: (context) => AiSettingsProvider()),
-    ChangeNotifierProvider(create: (context) => PickImage(context)),
+    ChangeNotifierProvider(create: (context) => PickMediaProvider(context)),
     ChangeNotifierProvider(create: (context) => ManageAiProvider()),
     ChangeNotifierProvider(create: (context) => DetectLanguage()),
     ChangeNotifierProvider(create: (context) => ThemeProvider()),

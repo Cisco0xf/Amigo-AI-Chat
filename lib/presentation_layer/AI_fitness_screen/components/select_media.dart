@@ -93,7 +93,7 @@ class SelectMedia extends StatelessWidget {
                                 label: "Image file",
                                 onTap: () async {
                                   await context
-                                      .read<PickImage>()
+                                      .read<PickMediaProvider>()
                                       .catchImageFromStorage()
                                       .whenComplete(() {
                                     MedaiDialogManager.hideSelector();
@@ -106,11 +106,11 @@ class SelectMedia extends StatelessWidget {
                                 label: "Audio file",
                                 onTap: () async {
                                   context
-                                      .read<PickImage>()
+                                      .read<PickMediaProvider>()
                                       .clearOldAudioBeforeAddingNewOne();
 
                                   await context
-                                      .read<PickImage>()
+                                      .read<PickMediaProvider>()
                                       .loadAudioFronStorage()
                                       .whenComplete(() {
                                     MedaiDialogManager.hideSelector();
@@ -125,7 +125,7 @@ class SelectMedia extends StatelessWidget {
                                   MedaiDialogManager.hideSelector();
 
                                   context
-                                      .read<PickImage>()
+                                      .read<PickMediaProvider>()
                                       .clearOldAudioBeforeAddingNewOne();
 
                                   await showRecordingDialog(context);

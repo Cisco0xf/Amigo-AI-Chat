@@ -1,4 +1,3 @@
-
 const String errorMsg =
     "Something goes wrong while the request, please try again.";
 const String internetError = "Please check your internet connection.";
@@ -20,4 +19,10 @@ const String micPermission =
 
 const String appTitle = "Amigo.ai";
 
-const String exitQ ="Would you like to exit the app ?";
+const String exitQ = "Would you like to exit the app ?";
+
+const String sourceCode = "Source code";
+const String sourceSubTitle = "Get the app source code ion GitHub";
+
+const String developed = "Developed by";
+const String developer = "Mahmoud Alshehyby";

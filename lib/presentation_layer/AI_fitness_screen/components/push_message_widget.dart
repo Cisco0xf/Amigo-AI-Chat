@@ -27,7 +27,7 @@ class PushMessageToAIWidget extends StatelessWidget {
     context.watch<ManageAiProvider>();
     return Column(
       children: [
-        Consumer<PickImage>(
+        Consumer<PickMediaProvider>(
           builder: (context, picker, _) {
             return Row(
               children: <Widget>[

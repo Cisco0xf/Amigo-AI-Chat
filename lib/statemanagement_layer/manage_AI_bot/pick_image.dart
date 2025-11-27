@@ -15,12 +15,12 @@ enum UpdateType {
   image,
 }
 
-class PickImage extends ChangeNotifier {
+class PickMediaProvider extends ChangeNotifier {
   // Chek Storage Premission
 
   final BuildContext context;
 
-  PickImage(this.context);
+  PickMediaProvider(this.context);
 
   Future<bool> _checkStoragePermission(UpdateType type) async {
     final PermissionStatus storage = await Permission.storage.status;

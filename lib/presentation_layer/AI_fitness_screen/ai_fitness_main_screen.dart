@@ -3,6 +3,7 @@ import 'package:amigo/commons/commons.dart';
 import 'package:amigo/constants/app_colors.dart';
 import 'package:amigo/constants/app_fonts.dart';
 import 'package:amigo/constants/texts.dart';
+import 'package:amigo/presentation_layer/AI_fitness_screen/ai_chat_settings/dev_section.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/ai_chat_settings/show_exit_dialog.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/ai_chat_settings/show_settings_dialog.dart';
 import 'package:amigo/presentation_layer/AI_fitness_screen/components/chat_widget.dart';
@@ -97,6 +98,12 @@ class _AiFitnessMainScreenState extends State<AiFitnessMainScreen> {
                   ),
                 ),
                 actions: <Widget>[
+                  Clicker(
+                    onClick: () async {
+                      await showDeveloper();
+                    },
+                    child: const Icon(Icons.developer_mode),
+                  ),
                   IconButton(
                     onPressed: () async {
                       await showSettingsDialog;

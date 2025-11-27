@@ -192,8 +192,8 @@ class ManageAiProvider with ChangeNotifier {
       Log.log("AI request starts....");
       // final Content contentText = Content.text(message);
 
-      final PickImage multiMedia =
-          Provider.of<PickImage>(context, listen: false);
+      final PickMediaProvider multiMedia =
+          Provider.of<PickMediaProvider>(context, listen: false);
 
       final Uint8List? userImage = multiMedia.convertedImage;
 
@@ -231,7 +231,7 @@ class ManageAiProvider with ChangeNotifier {
       currentChat = [...currentChat, chatMessage];
       notifyListeners();
 
-      final PickImage picker = Provider.of<PickImage>(
+      final PickMediaProvider picker = Provider.of<PickMediaProvider>(
         context,
         listen: false,
       );
