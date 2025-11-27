@@ -224,7 +224,7 @@ dev_dependencies:
 ### 2- Installation
 
   ```bash
-  git clone https://github.com/yourusername/ai-fitness-chat.git
+  git clone https://github.com/Cisco0xf/Amigo-AI-Chat.git
   ```
 
 ### 3- Install dependencies:
