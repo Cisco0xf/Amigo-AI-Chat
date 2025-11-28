@@ -190,7 +190,6 @@ class ManageAiProvider with ChangeNotifier {
       notifyListeners();
 
       Log.log("AI request starts....");
-      // final Content contentText = Content.text(message);
 
       final PickMediaProvider multiMedia =
           Provider.of<PickMediaProvider>(context, listen: false);
