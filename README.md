@@ -23,8 +23,8 @@
 <table>
    <tr>
     <td align="center"><b>Spalsh Screen</b></td>
-    <td align="center"><b>Main Screen</b></td>
-    <td align="center"><b>Details screen</b></td>
+    <td align="center"><b>Init Screen</b></td>
+    <td align="center"><b>Dark Init screen</b></td>
   </tr>
   
   <tr>
@@ -38,9 +38,9 @@
 
 <table>
    <tr>
-    <td align="center"><b>Spalsh Screen</b></td>
-    <td align="center"><b>Main Screen</b></td>
-    <td align="center"><b>Details screen</b></td>
+    <td align="center"><b>Audio Chat Screen</b></td>
+    <td align="center"><b>Image Chat Screen</b></td>
+    <td align="center"><b>Recourding Light </b></td>
   </tr>
   
   <tr>
@@ -54,9 +54,9 @@
 
 <table>
    <tr>
-    <td align="center"><b>Spalsh Screen</b></td>
-    <td align="center"><b>Main Screen</b></td>
-    <td align="center"><b>Details screen</b></td>
+    <td align="center"><b>Dark Theme</b></td>
+    <td align="center"><b>Settings Dialog</b></td>
+    <td align="center"><b>Recourding Dark</b></td>
   </tr>
   
   <tr>
@@ -70,8 +70,8 @@
 
 <table>
    <tr>
-    <td align="center"><b>Spalsh Screen</b></td>
-    <td align="center"><b>Main Screen</b></td>
+    <td align="center"><b>Copy message</b></td>
+    <td align="center"><b>App Developer</b></td>
   </tr>
   
   <tr>

@@ -1,49 +1,5 @@
 // ignore_for_file: constant_identifier_names
 
-/* import 'dart:developer';
-
-import 'package:amigo/data_layer/ai_models/ai_history_model.dart';
-import 'package:amigo/data_layer/database/local_repository.dart';
-import 'package:hive/hive.dart';
-
-class AiHistoryDatabase implements LocalRepository {
-  final String _aiHistoryBoxName = "AI_HISTORY_CHAT_7780";
-  @override
-  Future<Box> get openHiveBox async {
-    final Box box = await Hive.openBox<AIHistoryModel>(_aiHistoryBoxName);
-
-    return box;
-  }
-
-  @override
-  Future<List<AIHistoryModel>> getHistoryFromDatabse({
-    required Box box,
-  }) async {
-    List<AIHistoryModel> historyChat =
-        box.values.toList() as List<AIHistoryModel>;
-
-    return historyChat;
-  }
-
-  @override
-  Future<void> addNewMessage({
-    required Box box,
-    required AIHistoryModel message,
-  }) async {
-    try {
-      await box.add(message);
-    } catch (error) {
-      log("You Fucke Up : $error");
-    }
-  }
-
-  @override
-  Future<void> clearHistory({required Box box}) async {
-    await box.clear();
-  }
-}
- */
-
 import 'package:amigo/commons/my_logger.dart';
 import 'package:amigo/commons/navigation_key.dart';
 import 'package:amigo/data_layer/ai_models/ai_history_model.dart';

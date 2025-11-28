@@ -156,6 +156,7 @@ class ManageAiProvider with ChangeNotifier {
     Log.log("Length of the current chat items => ${currentChat.length}");
 
     //
+
     aiChat = gemiAI!.startChat(
       history: <Content>[
         for (int i = 0; i < currentChat.length; i++) ...{
@@ -252,6 +253,8 @@ class ManageAiProvider with ChangeNotifier {
       );
 
       // Scroll to Bottom according to the Animted Text bool value
+
+      // Video Duration ==> Before => 06:36:08 | After => 02:09:07
 
       if (aiSettings.isResponseAnimated) {
         autoScrollDown();
