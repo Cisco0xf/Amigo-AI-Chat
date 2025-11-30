@@ -146,106 +146,108 @@ class _MessageWidgetState extends State<MessageWidget> {
   @override
   Widget build(BuildContext context) {
     context.watch<ThemeProvider>();
-    return Consumer<AiSettingsProvider>(builder: (context, settings, _) {
-      return Consumer<ManageAiProvider>(
-        builder: (context, aiChat, _) {
-          bool isTextAnimted =
-              widget.isLastMessage && settings.isResponseAnimated;
+    return Consumer<AiSettingsProvider>(
+      builder: (context, settings, _) {
+        return Consumer<ManageAiProvider>(
+          builder: (context, aiChat, _) {
+            bool isTextAnimted =
+                widget.isLastMessage && settings.isResponseAnimated;
 
-          return Column(
-            crossAxisAlignment: widget.isFromUser
-                ? CrossAxisAlignment.start
-                : CrossAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: widget.isFromUser
-                    ? MainAxisAlignment.start
-                    : MainAxisAlignment.end,
-                children: <Widget>[
+            return Column(
+              crossAxisAlignment: widget.isFromUser
+                  ? CrossAxisAlignment.start
+                  : CrossAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: widget.isFromUser
+                      ? MainAxisAlignment.start
+                      : MainAxisAlignment.end,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(
+                        top: 10,
+                        bottom: widget.isFromUser ? 2.0 : 10,
+                        right: widget.isFromUser ? 10 : 0,
+                        left: 10,
+                      ),
+                      constraints: BoxConstraints(maxWidth: _boxWidth),
+                      decoration: BoxDecoration(
+                        borderRadius: _userRaduis(
+                          raduis: widget.isFromUser ? 25.0 : 15.0,
+                        ),
+                        color: widget.isFromUser
+                            ? SwitchColors.secondary
+                            : SwitchColors.primary,
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.only(
+                            topLeft: const Radius.circular(15),
+                            topRight: const Radius.circular(15),
+                            bottomRight: const Radius.circular(15),
+                            bottomLeft: widget.isFromUser
+                                ? const Radius.circular(0)
+                                : const Radius.circular(15),
+                          ),
+                          onLongPress: () {
+                            FlutterClipboard.copy(message).whenComplete(
+                              () => showToastification(
+                                  title: msgCopied,
+                                  type: ToastificationType.success),
+                            );
+                          },
+                          child: Padding(
+                            padding: padding(10.0),
+                            child: _messageContent(isTextAnimted),
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (!widget.isFromUser) ...{
+                      Padding(
+                        padding: padding(5.0),
+                        child: CircleAvatar(
+                          backgroundColor: const Color(0xFF9BB8CD),
+                          child: Image.asset(Assets.logo),
+                        ),
+                      )
+                    }
+                  ],
+                ),
+                if (widget.isFromUser) ...{
                   Container(
-                    margin: EdgeInsets.only(
-                      top: 10,
-                      bottom: widget.isFromUser ? 2.0 : 10,
-                      right: widget.isFromUser ? 10 : 0,
-                      left: 10,
-                    ),
-                    constraints: BoxConstraints(maxWidth: _boxWidth),
+                    margin: EdgeInsets.only(left: context.screenWidth * .03),
+                    padding: padding(5.0),
                     decoration: BoxDecoration(
-                      borderRadius: _userRaduis(
-                        raduis: widget.isFromUser ? 25.0 : 15.0,
-                      ),
-                      color: widget.isFromUser
-                          ? SwitchColors.secondary
-                          : SwitchColors.primary,
+                      borderRadius: _userRaduis(),
+                      color: SwitchColors.opcColor,
+                      border: Border.all(color: SwitchColors.border),
                     ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.only(
-                          topLeft: const Radius.circular(15),
-                          topRight: const Radius.circular(15),
-                          bottomRight: const Radius.circular(15),
-                          bottomLeft: widget.isFromUser
-                              ? const Radius.circular(0)
-                              : const Radius.circular(15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        /* const Gap(wRatio: 0.03), */
+                        Text(
+                          widget.messageTime.formatMessageTime,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w200,
+                            color: SwitchColors.text,
+                            fontFamily: FontFamily.mainFont,
+                          ),
                         ),
-                        onLongPress: () {
-                          FlutterClipboard.copy(message).whenComplete(
-                            () => showToastification(
-                                title: msgCopied,
-                                type: ToastificationType.success),
-                          );
-                        },
-                        child: Padding(
-                          padding: padding(10.0),
-                          child: _messageContent(isTextAnimted),
-                        ),
-                      ),
+                      ],
                     ),
-                  ),
-                  if (!widget.isFromUser) ...{
-                    Padding(
-                      padding: padding(5.0),
-                      child: CircleAvatar(
-                        backgroundColor: const Color(0xFF9BB8CD),
-                        child: Image.asset(Assets.logo),
-                      ),
-                    )
-                  }
-                ],
-              ),
-              if (widget.isFromUser) ...{
-                Container(
-                  margin: EdgeInsets.only(left: context.screenWidth * .03),
-                  padding: padding(5.0),
-                  decoration: BoxDecoration(
-                    borderRadius: _userRaduis(),
-                    color: SwitchColors.opcColor,
-                    border: Border.all(color: SwitchColors.border),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      /* const Gap(wRatio: 0.03), */
-                      Text(
-                        widget.messageTime.formatMessageTime,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w200,
-                          color: SwitchColors.text,
-                          fontFamily: FontFamily.mainFont,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              },
-            ],
-          );
-        },
-      );
-    });
+                  )
+                },
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 }
